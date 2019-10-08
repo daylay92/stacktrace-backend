@@ -23,6 +23,7 @@ class Auth {
       const user = new User(req.body);
       await user.save();
       const userData = createUserResponse(user);
+      res.cookie('token', userData.token, { maxAge: 7200000, httpOnly: true });
       successResponse(res, userData, 201);
     } catch (e) {
       errorResponse(res, {});

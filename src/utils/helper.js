@@ -106,37 +106,33 @@ class Helpers {
   }
 
   /**
-   * Checks for token in the authorization header property.
+   * Checks for token in the authorization and x-access-token header properties.
    * @static
-   * @param {object} authorization - The authorization header property.
+   * @param {object} headers - The headers object.
    * @memberof Helpers
-   * @returns {Boolean} - Returns true if token is found and false if otherwise.
+   * @returns {string | null} - Returns token or null.
    */
-  static getAuthorizationToken(authorization) {
+  static getAuthorizationToken(headers) {
     let bearerToken = null;
-    if (authorization) {
-      bearerToken = authorization.split(' ')[1]
-        ? authorization.split(' ')[1]
-        : authorization;
+    if (headers.authorization) {
+      bearerToken = headers.authorization.split(' ')[1]
+        ? headers.authorization.split(' ')[1]
+        : headers.authorization;
     }
-    return bearerToken;
+    return bearerToken || headers['x-access-token'];
   }
 
   /**
-   * Aggregrates a search for the token in a number of places.
+   * Aggregrates a search for the access token in a number of places.
    * @static
    * @param {Request} req - The express request object.
    * @memberof Helpers
    * @returns {string | null } - Returns jwt token or null.
    */
   static checkToken(req) {
-    const {
-      headers: { authorization }
-    } = req;
-    const bearerToken = Helpers.getAuthorizationToken(authorization);
-    return (
-      bearerToken || req.headers['x-access-token'] || req.headers.token || req.body.token
-    );
+    const { headers, cookies, body } = req;
+    const token = Helpers.getAuthorizationToken(headers);
+    return cookies.token || token || headers.token || body.token;
   }
 
   /**

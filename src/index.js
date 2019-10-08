@@ -3,6 +3,7 @@ import 'dotenv/config';
 import express, { json, urlencoded } from 'express';
 import morgan from 'morgan';
 import errorHandler from 'errorhandler';
+import cookieParser from 'cookie-parser';
 import DB from './database';
 import routes from './routes';
 
@@ -14,6 +15,7 @@ const app = express();
 app.use(morgan('dev'));
 app.use(json());
 app.use(urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // Routes
 routes(app);
@@ -21,7 +23,7 @@ routes(app);
 // Handle Errors on dev & test env only
 if (NODE_ENV !== 'production') app.use(errorHandler());
 
-// Handle all Requests not Handled by the above routes
+// Handle all Requests not handled by all designated routes
 app.use((req, res, next) => {
   const err = new Error('Not found');
   err.status = 404;
@@ -38,7 +40,7 @@ app.use((err, req, res, next) => {
 // set port
 const port = PORT || 3000;
 
-// listen for requests
+// Establish initial database connection and then listen for requests
 (async () => {
   try {
     const db = await DB.connect();
