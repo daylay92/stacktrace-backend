@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+  - 'stable'
+cache:
+  directories:
+    - node_modules
+services:
+  - mongodb
+script:
+  - npm ci
+  - npm test
+after_success:
+  - npm run coverage
+notifications:
+  email: false
