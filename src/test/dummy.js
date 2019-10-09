@@ -10,6 +10,10 @@ export const invalidUserData = {
   email: 'daylay10yahoo.com',
   password: 'daylayayo1'
 };
+export const existingUser = {
+  email: 'daylay10@yahoo.com',
+  password: 'daylayayo1'
+};
 export const sinonMockResponse = sinon => {
   const res = {};
   res.status = sinon.stub().returns(res);
