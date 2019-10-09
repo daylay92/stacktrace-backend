@@ -1,0 +1,252 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "Stacktrace",
+    "description": "Stacktrace - A simple REST API, that enables registered users to ask and get answers to tech questions."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/"
+    },
+    {
+      "url": "https://jubilee-backend-staging.herokuapp.com/"
+    }
+  ],
+  "host": "",
+  "basePath": "/api/v1",
+  "securityDefinitions": {
+    "Bearer": {
+      "description": "Standard Authorization header using the bearer scheme. Example: \"bearer {token}\"",
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    },
+    "cookieAuth": {
+      "description": "A convenient way to deliver access tokens from client to server by bootstrapping token within a cookie",
+      "type": "apiKey",
+      "name": "token",
+      "in": "cookie"
+    }
+  },
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Endpoint for Authentication"
+    }
+  ],
+  "paths": {
+    "/auth/signup": {
+      "post": {
+        "description": "Registers a User",
+        "summary": "Creates a new user on the system",
+        "tags": ["Auth"],
+        "produces": ["application/json"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "This is the request body object containing user information",
+            "schema": {
+              "$ref": "#/components/schemas/requestBody/signupRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successfully created a new user. Note that a cookie has been set to always deliver your token to the server when ever you try to access a protected route, hence until your token expires, you do not need to manually add your token to successfully access all protected endpoints.",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/201"
+            }
+          },
+          "400": {
+            "description": "Bad Request, Validation error occurred",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/400"
+            }
+          },
+          "409": {
+            "description": "Email address already exists",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/409"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/500"
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "requestBody": {
+        "signupRequest": {
+          "title": "User Signup Request",
+          "type": "object",
+          "properties": {
+            "firstName": {
+              "description": "First name of the user",
+              "type": "string"
+            },
+            "lastName": {
+              "description": "Last name of the user",
+              "type": "string"
+            },
+            "email": {
+              "description": "Email of the user",
+              "type": "string"
+            },
+            "password": {
+              "description": "The Password of the user",
+              "type": "string"
+            }
+          },
+          "example": {
+            "firstName": "King",
+            "lastName": "David",
+            "email": "stacktrace@gmail.com",
+            "password": "Elija455h"
+          },
+          "required": ["firstName, lastName, email, password"]
+        }
+      },
+      "responseBody": {
+        "201": {
+          "properties": {
+            "status": {
+              "description": "sucessfully created record",
+              "type": "string"
+            },
+            "data": {
+              "description": "An object containing properties of the newly created record",
+              "type": "object"
+            }
+          },
+          "example": {
+            "status": "success",
+            "data": {
+              "firstName": "King",
+              "lastName": "David",
+              "email": "barelegs@gmail.com",
+              "token": "8949y4dhiudfhh0doj0340"
+            }
+          }
+        },
+        "400": {
+          "properties": {
+            "status": {
+              "description": "Client error, usually just the text: 'fail'",
+              "type": "string"
+            },
+            "error": {
+              "description": "A descriptive error message",
+              "type": "object"
+            }
+          },
+          "example": {
+            "status": "fail",
+            "error": {
+              "message": "Some validation error occurred"
+            }
+          }
+        },
+        "401": {
+          "properties": {
+            "status": {
+              "description": "Authentication error, usually just the text: 'fail'",
+              "type": "string"
+            },
+            "error": {
+              "description": "A descriptive error message",
+              "type": "object"
+            }
+          },
+          "example": {
+            "status": "fail",
+            "error": {
+              "message": "Token is required"
+            }
+          }
+        },
+        "403": {
+          "properties": {
+            "status": {
+              "description": "Authorization error, usually just the text: 'fail'",
+              "type": "string"
+            },
+            "error": {
+              "description": "A descriptive error message",
+              "type": "object"
+            }
+          },
+          "example": {
+            "status": "fail",
+            "error": {
+              "message": "User is unauthorized"
+            }
+          }
+        },
+        "404": {
+          "properties": {
+            "status": {
+              "description": "Record not found, usually just the text: 'fail'",
+              "type": "string"
+            },
+            "error": {
+              "description": "A descriptive error message",
+              "type": "object"
+            }
+          },
+          "example": {
+            "status": "fail",
+            "error": {
+              "message": "user was not found"
+            }
+          }
+        },
+        "409": {
+          "properties": {
+            "status": {
+              "description": "Record already exists, usually just the text: 'fail'",
+              "type": "string"
+            },
+            "error": {
+              "description": "A descriptive error message",
+              "type": "object"
+            }
+          },
+          "example": {
+            "status": "fail",
+            "error": {
+              "message": "A user with your email already exists"
+            }
+          }
+        },
+        "500": {
+          "properties": {
+            "status": {
+              "description": "Server error, usually just the text: 'fail'",
+              "type": "string"
+            },
+            "error": {
+              "description": "A descriptive error message",
+              "type": "object"
+            }
+          },
+          "example": {
+            "status": "fail",
+            "error": {
+              "message": "Some error occurred, try again"
+            }
+          }
+        }
+      }
+    }
+  }
+}

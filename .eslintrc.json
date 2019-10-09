@@ -6,7 +6,11 @@
   "extends": ["airbnb-base"],
   "globals": {
     "Atomics": "readonly",
-    "SharedArrayBuffer": "readonly"
+    "SharedArrayBuffer": "readonly",
+    "describe": "readonly",
+    "it": "readonly",
+    "before": "readonly",
+    "afterEach": "readonly"
   },
   "parserOptions": {
     "ecmaVersion": 2018,
@@ -17,6 +21,10 @@
     "consistent-return": 0,
     "no-param-reassign": 0,
     "no-shadow": ["error", { "allow": ["req", "res", "err"] }],
+    "linebreak-style": 0,
+    "no-underscore-dangle": 0,
+    "object-curly-newline": 0,
+    "arrow-parens": 0,
     "valid-jsdoc": [
       "error",
       {

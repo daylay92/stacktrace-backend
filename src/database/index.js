@@ -1,11 +1,24 @@
+/* eslint-disable no-console */
 import mongoose from 'mongoose';
 import 'dotenv/config';
 
 const { MONGODB_URI, MONGODB_URI_DEV, NODE_ENV } = process.env;
 
-const connectionString =
-  NODE_ENV === 'development' ? MONGODB_URI_DEV : MONGODB_URI;
+const connectionString = NODE_ENV === 'development' ? MONGODB_URI_DEV : MONGODB_URI;
+
+/**
+ * Implements configuration for MongoDB.
+ *
+ * @class DB
+ */
 class DB {
+  /**
+   * Establishes connection to the database and returns the connection object.
+   *
+   * @static
+   * @returns { object } The connection object provided by mongoose.
+   * @memberof DB
+   */
   static async connect() {
     await mongoose.connect(connectionString, {
       useNewUrlParser: true,

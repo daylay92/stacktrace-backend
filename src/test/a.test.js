@@ -1,13 +1,13 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
-import mongoose from 'mongoose';
+import User from '../models';
 import app from '..';
 
 chai.use(chaiHttp);
 
-describe('Basic app configurations', () => {
+describe('Basic Utility Functions', () => {
   before(async () => {
-    await mongoose.connection;
+    await User.deleteMany();
   });
   it("should respond with a 404 error if a user tries to access a route that doesn't exist", async () => {
     const res = await chai.request(app).get('/api/v1/northeast');
