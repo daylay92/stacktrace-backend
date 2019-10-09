@@ -1,3 +1,4 @@
 import validateAuthSchema from './auth';
+import validateQuestionSchema from './question';
 
-export default validateAuthSchema;
+export { validateAuthSchema, validateQuestionSchema };

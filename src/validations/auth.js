@@ -1,6 +1,9 @@
 import Joi from '@hapi/joi';
+import Helpers from '../utils';
 
-const AuthSchema = Joi.object({
+const { getErrorLabel } = Helpers;
+
+const authSchema = Joi.object({
   firstName: Joi.string()
     .min(2)
     .max(15)
@@ -22,15 +25,9 @@ const AuthSchema = Joi.object({
 });
 
 const validateAuthSchema = body => {
-  const { error } = AuthSchema.validate(body);
-  if (error) {
-    const [
-      {
-        context: { label }
-      }
-    ] = error.details;
-    return label;
-  }
+  const { error } = authSchema.validate(body);
+  const label = getErrorLabel(error);
+  if (label) return label;
   return true;
 };
 

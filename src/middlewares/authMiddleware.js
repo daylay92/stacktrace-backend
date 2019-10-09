@@ -1,9 +1,9 @@
-import validateAuthSchema from '../validations';
+import { validateAuthSchema } from '../validations';
 import Helpers from '../utils';
-import User from '../services';
+import { User } from '../services';
 
 const { fetchByEmail } = User;
-const { errorResponse } = Helpers;
+const { errorResponse, verifyToken, checkToken } = Helpers;
 
 /**
  * A collection of middleware methods used to verify the autheticity
@@ -99,6 +99,32 @@ class AuthMiddleware {
       next();
     } catch (e) {
       errorResponse(res, {});
+    }
+  }
+
+  /**
+   * Verifies the validity of a user's access token or and the presence of it
+   * @param {object} req - The request from the endpoint.
+   * @param {object} res - The response returned by the method.
+   * @param {function} next - Call the next operation.
+   *@returns {object} - Returns an object (error or response).
+   * @memberof AuthMiddleware
+   *
+   */
+  static authenticate(req, res, next) {
+    const token = checkToken(req);
+    if (!token) {
+      return errorResponse(res, {
+        code: 401,
+        message: 'Access denied, Token required'
+      });
+    }
+    try {
+      const decoded = verifyToken(token);
+      req.data = decoded;
+      next();
+    } catch (err) {
+      errorResponse(res, { code: 401, message: err.message });
     }
   }
 }

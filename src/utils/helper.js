@@ -136,6 +136,34 @@ class Helpers {
   }
 
   /**
+   * Makes of a model instance, removes the __v property and  changes
+   *  the _id property to id, returning a new javascript object literal.
+   * @static
+   * @param {object} data - New Instance.
+   * @memberof Helpers
+   * @returns {object } - A new javascript object.
+   */
+  static simpleExtract(data) {
+    const res = { ...data._doc };
+    delete res._id;
+    delete res.__v;
+    return { id: data._id, ...res };
+  }
+
+  /**
+   * Transforms the author object.
+   * @static
+   * @param {object} data - New Instance.
+   * @memberof Helpers
+   * @returns {object } - A new javascript object.
+   */
+  static questionResponse(data) {
+    const res = Helpers.simpleExtract(data);
+    const { firstName, lastName, email } = { ...res.author._doc };
+    return { ...res, author: { id: res.author._id, firstName, lastName, email } };
+  }
+
+  /**
    * Extracts some user properties to be sent as a response and adds jwt token.
    * @static
    * @param {object} user - New User Instance.
@@ -152,6 +180,25 @@ class Helpers {
       email,
       token
     };
+  }
+
+  /**
+   * It extracts a validation error label from the Joi error object.
+   * @static
+   * @param {object} error - Joi error object.
+   * @memberof Helpers
+   * @returns {string | null } - A validation error message or null if all entries are valid.
+   */
+  static getErrorLabel(error) {
+    if (error) {
+      const [
+        {
+          context: { label }
+        }
+      ] = error.details;
+      return label;
+    }
+    return null;
   }
 }
 

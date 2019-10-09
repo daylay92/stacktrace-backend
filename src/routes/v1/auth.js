@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import AuthMiddleware from '../../middlewares';
-import Auth from '../../controllers';
+import { AuthMiddleware } from '../../middlewares';
+import { AuthController } from '../../controllers';
 
-const { signup, signin } = Auth;
+const { signup, signin } = AuthController;
 const {
   validate,
   checkEmailAlreadyExists,

@@ -1,7 +1,7 @@
-import User from '../models';
+import { User } from '../models';
 
 /**
- * It is the interface for user model.
+ * It is the interface of user model.
  *
  * @class UserService
  */

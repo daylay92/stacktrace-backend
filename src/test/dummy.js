@@ -28,3 +28,16 @@ export const errorResponse = {
     errors: undefined
   }
 };
+export const userAskingAQuestion = {
+  firstName: 'Ayodq',
+  lastName: 'Akinb',
+  email: 'daylayzi@yahoo.com',
+  password: 'daylayayo1'
+};
+export const newQuestion = {
+  text: 'What is it like to be a software Engineer?'
+};
+
+export const invalidQuestion = {
+  text: 'Why?'
+};

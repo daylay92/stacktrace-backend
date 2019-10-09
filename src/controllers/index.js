@@ -1,3 +1,4 @@
-import Auth from './auth';
+import AuthController from './auth';
+import QuestionController from './question';
 
-export default Auth;
+export { AuthController, QuestionController };

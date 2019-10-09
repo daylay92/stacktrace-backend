@@ -1,3 +1,4 @@
 import AuthMiddleware from './authMiddleware';
+import QuestionMiddleware from './questionMiddleware';
 
-export default AuthMiddleware;
+export { AuthMiddleware, QuestionMiddleware };
