@@ -31,7 +31,7 @@ class AuthMiddleware {
   }
 
   /**
-   * Validates user's registration data.
+   * Checks if the email of the new user already exists.
    * @param {object} req - The request from the endpoint.
    * @param {object} res - The response returned by the method.
    * @param {function} next - Call the next operation.
@@ -49,6 +49,53 @@ class AuthMiddleware {
           message: 'A user with your email already exists'
         });
       }
+      next();
+    } catch (e) {
+      errorResponse(res, {});
+    }
+  }
+
+  /**
+   * Validates user's login credentials.
+   * @param {object} req - The request from the endpoint.
+   * @param {object} res - The response returned by the method.
+   * @param {function} next - Call the next operation.
+   *@returns {object} - Returns an object (error or response).
+   * @memberof AuthMiddleware
+   *
+   */
+  static async validateLoginFields(req, res, next) {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return errorResponse(res, {
+        code: 401,
+        message: 'Invalid email/password'
+      });
+    }
+    next();
+  }
+
+  /**
+   * Validates user's login credentials, with emphasis on the
+   * existance of a user with the provided email address.
+   * @param {object} req - The request from the endpoint.
+   * @param {object} res - The response returned by the method.
+   * @param {function} next - Call the next operation.
+   *@returns {object} - Returns an object (error or response).
+   * @memberof AuthMiddleware
+   *
+   */
+  static async verifyIfExistingUser(req, res, next) {
+    try {
+      const { email } = req.body;
+      const [user] = await User.find({ email });
+      if (!user) {
+        return errorResponse(res, {
+          code: 401,
+          message: 'Invalid email/password'
+        });
+      }
+      req.user = user;
       next();
     } catch (e) {
       errorResponse(res, {});

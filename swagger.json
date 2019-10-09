@@ -10,7 +10,7 @@
       "url": "http://localhost:3000/"
     },
     {
-      "url": "https://jubilee-backend-staging.herokuapp.com/"
+      "url": ""
     }
   ],
   "host": "",
@@ -39,7 +39,7 @@
     "/auth/signup": {
       "post": {
         "description": "Registers a User",
-        "summary": "Creates a new user on the system",
+        "summary": "Creates a new user on the App",
         "tags": ["Auth"],
         "produces": ["application/json"],
         "security": [],
@@ -71,6 +71,46 @@
             "description": "Email address already exists",
             "schema": {
               "$ref": "#/components/schemas/responseBody/409"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/500"
+            }
+          }
+        }
+      }
+    },
+    "/auth/signin": {
+      "post": {
+        "description": "Logs in a user",
+        "summary": "Enables a user to login so as to have access to the App's features",
+        "tags": ["Auth"],
+        "produces": ["application/json"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "This is the request body object containing user information",
+            "schema": {
+              "$ref": "#/components/schemas/requestBody/signinRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully logged in user. Note that a cookie has been set to always deliver your token to the server when ever you try to access a protected route, hence until your token expires, you do not need to manually add your token to successfully access all protected endpoints.",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/200"
+            }
+          },
+          "401": {
+            "description": "Unautheticated Request / Invalid login credentials",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/401"
             }
           },
           "500": {
@@ -114,9 +154,49 @@
             "password": "Elija455h"
           },
           "required": ["firstName, lastName, email, password"]
+        },
+        "signinRequest": {
+          "title": "User Signin Request",
+          "type": "object",
+          "properties": {
+            "email": {
+              "description": "Email of the user",
+              "type": "string"
+            },
+            "password": {
+              "description": "The Password of the user",
+              "type": "string"
+            }
+          },
+          "example": {
+            "email": "stacktrace@gmail.com",
+            "password": "Elija455h"
+          },
+          "required": ["email, password"]
         }
       },
       "responseBody": {
+        "200": {
+          "properties": {
+            "status": {
+              "description": "sucessful request",
+              "type": "string"
+            },
+            "data": {
+              "description": "An object containing properties of the newly created record",
+              "type": "object"
+            }
+          },
+          "example": {
+            "status": "success",
+            "data": {
+              "firstName": "King",
+              "lastName": "David",
+              "email": "barelegs@gmail.com",
+              "token": "8949y4dhiudfhh0doj0340"
+            }
+          }
+        },
         "201": {
           "properties": {
             "status": {
@@ -145,8 +225,14 @@
               "type": "string"
             },
             "error": {
-              "description": "A descriptive error message",
-              "type": "object"
+              "description": "An error object",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "A descriptive error message",
+                  "type": "string"
+                }
+              }
             }
           },
           "example": {
@@ -163,8 +249,14 @@
               "type": "string"
             },
             "error": {
-              "description": "A descriptive error message",
-              "type": "object"
+              "description": "An error object",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "A descriptive error message",
+                  "type": "string"
+                }
+              }
             }
           },
           "example": {
@@ -181,8 +273,14 @@
               "type": "string"
             },
             "error": {
-              "description": "A descriptive error message",
-              "type": "object"
+              "description": "An error object",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "A descriptive error message",
+                  "type": "string"
+                }
+              }
             }
           },
           "example": {
@@ -199,8 +297,14 @@
               "type": "string"
             },
             "error": {
-              "description": "A descriptive error message",
-              "type": "object"
+              "description": "An error object",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "A descriptive error message",
+                  "type": "string"
+                }
+              }
             }
           },
           "example": {
@@ -217,8 +321,14 @@
               "type": "string"
             },
             "error": {
-              "description": "A descriptive error message",
-              "type": "object"
+              "description": "An error object",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "A descriptive error message",
+                  "type": "string"
+                }
+              }
             }
           },
           "example": {
@@ -235,8 +345,14 @@
               "type": "string"
             },
             "error": {
-              "description": "A descriptive error message",
-              "type": "object"
+              "description": "An error object",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "A descriptive error message",
+                  "type": "string"
+                }
+              }
             }
           },
           "example": {
