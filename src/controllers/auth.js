@@ -1,14 +1,14 @@
-import User from '../services';
+import { User } from '../services';
 import Helpers from '../utils';
 
 const { errorResponse, successResponse, createUserResponse, comparePassword } = Helpers;
 
 /**
- * A collection of methods that controls issues the final response during authetication.
+ * A collection of methods that controls and issues the final response during authetication.
  *
- * @class Auth
+ * @class AuthController
  */
-class Auth {
+class AuthController {
   /**
    * Registers a new user.
    *
@@ -24,7 +24,7 @@ class Auth {
       await user.save();
       const userData = createUserResponse(user);
       res.cookie('token', userData.token, { maxAge: 7200000, httpOnly: true });
-      successResponse(res, userData, 201);
+      return successResponse(res, userData, 201);
     } catch (e) {
       errorResponse(res, {});
     }
@@ -58,4 +58,4 @@ class Auth {
   }
 }
 
-export default Auth;
+export default AuthController;

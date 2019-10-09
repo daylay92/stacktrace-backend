@@ -7,7 +7,7 @@ const { hashPassword } = Helpers;
 
 const options = { timestamp: true };
 
-const UserSchema = new Schema(
+const userSchema = new Schema(
   {
     firstName: {
       type: String,
@@ -28,12 +28,12 @@ const UserSchema = new Schema(
     password: {
       type: String,
       required: true,
-      set: (plainPassword) => hashPassword(plainPassword)
+      set: plainPassword => hashPassword(plainPassword)
     }
   },
   options
 );
 
-const User = mongoose.model('User', UserSchema);
+const User = mongoose.model('User', userSchema);
 
 export default User;

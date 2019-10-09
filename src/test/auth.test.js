@@ -3,7 +3,7 @@ import chaiHttp from 'chai-http';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import app from '..';
-import Auth from '../controllers';
+import { AuthController } from '../controllers';
 import {
   newUser,
   invalidUserData,
@@ -13,7 +13,7 @@ import {
 } from './dummy';
 import Helpers from '../utils';
 
-const { signup, signin } = Auth;
+const { signup, signin } = AuthController;
 
 chai.use(chaiHttp);
 chai.use(sinonChai);

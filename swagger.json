@@ -32,7 +32,11 @@
   "tags": [
     {
       "name": "Auth",
-      "description": "Endpoint for Authentication"
+      "description": "Endpoints for Authentication"
+    },
+    {
+      "name": "Question",
+      "description": "Endpoints for Questions"
     }
   ],
   "paths": {
@@ -121,6 +125,52 @@
           }
         }
       }
+    },
+    "/question": {
+      "post": {
+        "description": "Enables users to ask a question",
+        "summary": "Enables a user to ask a question on the App",
+        "tags": ["Question"],
+        "produces": ["application/json"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "This is the request body object containing user information",
+            "schema": {
+              "$ref": "#/components/schemas/requestBody/newQuestion"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully a new question",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/200"
+            }
+          },
+          "400": {
+            "description": "Bad Request, Validation error occurred",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/400"
+            }
+          },
+          "401": {
+            "description": "Unautheticated Request / Invalid login credentials",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/401"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/500"
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -173,6 +223,20 @@
             "password": "Elija455h"
           },
           "required": ["email, password"]
+        },
+        "newQuestion": {
+          "title": "A request to create a new question",
+          "type": "object",
+          "properties": {
+            "text": {
+              "description": "A description of the question",
+              "type": "string"
+            }
+          },
+          "example": {
+            "text": "Is node.js the best server-side technology yet ?"
+          },
+          "required": ["text"]
         }
       },
       "responseBody": {
