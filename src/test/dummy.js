@@ -41,6 +41,12 @@ export const newQuestion = {
 export const invalidQuestion = {
   text: 'Why?'
 };
+export const newAnswer = {
+  text: 'The easiest answer is nothing'
+};
+export const inValidAnswer = {
+  text: 'e'
+};
 export const mockRes = {
   status() {
     return this;

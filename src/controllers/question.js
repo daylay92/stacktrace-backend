@@ -66,14 +66,18 @@ class QuestionController {
   static async getQuestionById(req, res) {
     try {
       const { question } = req;
-      successResponse(res, question, 200);
+      const resQuestion = await question
+        .populate('upVote.by', 'firstName lastName email')
+        .populate('downVote.by', 'firstName lastName email')
+        .execPopulate();
+      successResponse(res, resQuestion, 200);
     } catch (e) {
       errorResponse(res, {});
     }
   }
 
   /**
-   * UpVotes a question.
+   * Update's a question's vote.
    *
    * @static
    * @param {Request} req - The request from the endpoint.
@@ -81,34 +85,12 @@ class QuestionController {
    * @returns { JSON } A JSON response containing the details of the question.
    * @memberof QuestionController
    */
-  static async upVoteQuestion(req, res) {
+  static async upDateQuestion(req, res) {
     try {
       const { question } = req;
       await question.save();
       const resQuestion = await question
         .populate('upVote.by', 'firstName lastName email')
-        .execPopulate();
-      const updatedQuestion = modifyRes(resQuestion);
-      successResponse(res, updatedQuestion, 200);
-    } catch (e) {
-      errorResponse(res, {});
-    }
-  }
-
-  /**
-   * downVotes a question.
-   *
-   * @static
-   * @param {Request} req - The request from the endpoint.
-   * @param {Response} res - The response returned by the method.
-   * @returns { JSON } A JSON response containing the details of the question.
-   * @memberof QuestionController
-   */
-  static async downVoteQuestion(req, res) {
-    try {
-      const { question } = req;
-      await question.save();
-      const resQuestion = await question
         .populate('downVote.by', 'firstName lastName email')
         .execPopulate();
       const updatedQuestion = modifyRes(resQuestion);

@@ -28,6 +28,22 @@ class QuestionService extends Question {
       .populate({
         path: 'author',
         select: '-__v -password -createdAt -updatedAt'
+      })
+      .populate({
+        path: 'upVote.by',
+        select: 'firstName lastName email'
+      })
+      .populate({
+        path: 'downVote.by',
+        select: 'firstName lastName email'
+      })
+      .populate({
+        path: 'answers',
+        select: '-__v -question',
+        populate: {
+          path: 'author',
+          select: 'firstName lastName email'
+        }
       });
   }
 
@@ -43,6 +59,14 @@ class QuestionService extends Question {
       .populate({
         path: 'author',
         select: '-__v -password -createdAt -updatedAt'
+      })
+      .populate({
+        path: 'answers',
+        select: '-__v -question',
+        populate: {
+          path: 'author',
+          select: 'firstName lastName email'
+        }
       });
   }
 }

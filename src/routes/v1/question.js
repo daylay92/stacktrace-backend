@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { QuestionMiddleware, AuthMiddleware } from '../../middlewares';
-import { QuestionController } from '../../controllers';
+import { QuestionController, AnswerController } from '../../controllers';
 
 const {
   validate,
@@ -11,13 +11,8 @@ const {
   syncDownVoteWithUpVote
 } = QuestionMiddleware;
 const { authenticate } = AuthMiddleware;
-const {
-  create,
-  getQuestions,
-  getQuestionById,
-  upVoteQuestion,
-  downVoteQuestion
-} = QuestionController;
+const { create, getQuestions, getQuestionById, upDateQuestion } = QuestionController;
+const { createAnswer } = AnswerController;
 
 const router = Router();
 router.post('/', authenticate, validate, create);
@@ -29,7 +24,7 @@ router.patch(
   validateId,
   syncUpVoteWithDownVote,
   syncUpVote,
-  upVoteQuestion
+  upDateQuestion
 );
 router.patch(
   '/downvote/:id',
@@ -37,7 +32,8 @@ router.patch(
   validateId,
   syncDownVoteWithUpVote,
   syncDownVote,
-  downVoteQuestion
+  upDateQuestion
 );
+router.post('/:id/answer', authenticate, validateId, validate, createAnswer);
 
 export default router;

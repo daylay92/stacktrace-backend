@@ -2,8 +2,8 @@
 import mongoose from 'mongoose';
 import 'dotenv/config';
 
-const { MONGODB_URI, MONGODB_URI_DEV, NODE_ENV } = process.env;
-const connectionString = NODE_ENV === 'development' ? MONGODB_URI_DEV : MONGODB_URI;
+const { MONGODB_URI, MONGODB_DEV_URI, NODE_ENV } = process.env;
+const connectionString = NODE_ENV === 'development' ? MONGODB_DEV_URI : MONGODB_URI;
 
 /**
  * Implements configuration for MongoDB.
