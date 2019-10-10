@@ -41,3 +41,14 @@ export const newQuestion = {
 export const invalidQuestion = {
   text: 'Why?'
 };
+export const mockRes = {
+  status() {
+    return this;
+  },
+  cookie() {
+    return this;
+  },
+  json(result) {
+    return result;
+  }
+};

@@ -4,9 +4,11 @@ import { QuestionController } from '../../controllers';
 
 const { validate } = QuestionMiddleware;
 const { authenticate } = AuthMiddleware;
-const { create } = QuestionController;
+const { create, getQuestions, getQuestionById } = QuestionController;
 
 const router = Router();
 router.post('/', authenticate, validate, create);
+router.get('/', getQuestions);
+router.get('/:id', getQuestionById);
 
 export default router;
