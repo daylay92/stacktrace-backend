@@ -2,7 +2,7 @@ import { Question } from '../services';
 import Helpers from '../utils';
 
 const { errorResponse, successResponse, modifyRes } = Helpers;
-const { fetch, fetchById } = Question;
+const { fetch } = Question;
 
 /**
  * A collection of methods that controls the success response
@@ -64,22 +64,56 @@ class QuestionController {
    * @memberof QuestionController
    */
   static async getQuestionById(req, res) {
-    const { id } = req.params;
     try {
-      const question = await fetchById(id);
-      if (question) return successResponse(res, question, 200);
-      errorResponse(res, {
-        code: 404,
-        message: 'A question with the id provided was not found'
-      });
+      const { question } = req;
+      successResponse(res, question, 200);
     } catch (e) {
-      const regex = /Cast to ObjectId/i;
-      if (regex.test(e.message)) {
-        return errorResponse(res, {
-          code: 400,
-          message: 'Invalid question Id'
-        });
-      }
+      errorResponse(res, {});
+    }
+  }
+
+  /**
+   * UpVotes a question.
+   *
+   * @static
+   * @param {Request} req - The request from the endpoint.
+   * @param {Response} res - The response returned by the method.
+   * @returns { JSON } A JSON response containing the details of the question.
+   * @memberof QuestionController
+   */
+  static async upVoteQuestion(req, res) {
+    try {
+      const { question } = req;
+      await question.save();
+      const resQuestion = await question
+        .populate('upVote.by', 'firstName lastName email')
+        .execPopulate();
+      const updatedQuestion = modifyRes(resQuestion);
+      successResponse(res, updatedQuestion, 200);
+    } catch (e) {
+      errorResponse(res, {});
+    }
+  }
+
+  /**
+   * downVotes a question.
+   *
+   * @static
+   * @param {Request} req - The request from the endpoint.
+   * @param {Response} res - The response returned by the method.
+   * @returns { JSON } A JSON response containing the details of the question.
+   * @memberof QuestionController
+   */
+  static async downVoteQuestion(req, res) {
+    try {
+      const { question } = req;
+      await question.save();
+      const resQuestion = await question
+        .populate('downVote.by', 'firstName lastName email')
+        .execPopulate();
+      const updatedQuestion = modifyRes(resQuestion);
+      successResponse(res, updatedQuestion, 200);
+    } catch (e) {
       errorResponse(res, {});
     }
   }

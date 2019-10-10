@@ -4,7 +4,6 @@ import { User, Question } from '../models';
 import app from '..';
 
 chai.use(chaiHttp);
-
 describe('Basic Utility Functions', () => {
   before(async () => {
     const clearUsers = User.deleteMany();
