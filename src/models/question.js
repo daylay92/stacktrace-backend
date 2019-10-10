@@ -15,8 +15,32 @@ const questionSchema = new Schema(
       required: true,
       minlength: 6
     },
-    upVote: Number,
-    downVote: Number
+    upVote: {
+      total: {
+        type: Number,
+        default: 0
+      },
+      by: [
+        {
+          type: Schema.Types.ObjectId,
+          required: true,
+          ref: 'User'
+        }
+      ]
+    },
+    downVote: {
+      total: {
+        type: Number,
+        default: 0
+      },
+      by: [
+        {
+          type: Schema.Types.ObjectId,
+          required: true,
+          ref: 'User'
+        }
+      ]
+    }
   },
   options
 );

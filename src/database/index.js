@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 import 'dotenv/config';
 
 const { MONGODB_URI, MONGODB_URI_DEV, NODE_ENV } = process.env;
-
 const connectionString = NODE_ENV === 'development' ? MONGODB_URI_DEV : MONGODB_URI;
 
 /**

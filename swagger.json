@@ -249,6 +249,92 @@
           }
         }
       }
+    },
+    "/question/upvote/{id}": {
+      "patch": {
+        "description": "Enables users to upvote a question",
+        "summary": "Enables a user to upvote a question by its Id",
+        "tags": ["Question"],
+        "produces": ["application/json"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The question Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved questions",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/upVoteSuccess"
+            }
+          },
+          "400": {
+            "description": "Invalid question Id",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/400"
+            }
+          },
+          "404": {
+            "description": "A question with the id doesn't exist",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/404"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/500"
+            }
+          }
+        }
+      }
+    },
+    "/question/downvote/{id}": {
+      "patch": {
+        "description": "Enables users to downvote a question",
+        "summary": "Enables a user to upvote a question by its Id",
+        "tags": ["Question"],
+        "produces": ["application/json"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The question Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved questions",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/downVoteSuccess"
+            }
+          },
+          "400": {
+            "description": "Invalid question Id",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/400"
+            }
+          },
+          "404": {
+            "description": "A question with the id doesn't exist",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/404"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/500"
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -410,6 +496,96 @@
               },
               "createdAt": "2019-10-10T01:21:59.972Z",
               "updatedAt": "2019-10-10T01:21:59.972Z"
+            }
+          }
+        },
+        "upVoteSuccess": {
+          "properties": {
+            "status": {
+              "description": "successfully upvoted a question",
+              "type": "string"
+            },
+            "data": {
+              "description": "An object containing properties of the upvoted question",
+              "type": "object"
+            }
+          },
+          "example": {
+            "status": "success",
+            "data": {
+              "upVote": {
+                "total": 1,
+                "by": [
+                  {
+                    "_id": "5d9f18582b977f0db8bbdbe3",
+                    "email": "daylay92@yahoo.com",
+                    "firstName": "Ayodele",
+                    "lastName": "King"
+                  }
+                ]
+              },
+              "downVote": {
+                "total": 0,
+                "by": []
+              },
+              "_id": "5d9f175232b0c80a101d1814",
+              "text": "What is the yoruba way of writing a regular expression ?",
+              "author": {
+                "_id": "5d9f175232b0c80a101d1813",
+                "firstName": "Ayodq",
+                "lastName": "Akinb",
+                "email": "daylayzi@yahoo.com"
+              },
+              "createdAt": "2019-10-10T11:34:42.363Z",
+              "updatedAt": "2019-10-10T11:51:12.381Z"
+            }
+          }
+        },
+        "downVoteSuccess": {
+          "properties": {
+            "status": {
+              "description": "successfully upvoted a question",
+              "type": "string"
+            },
+            "data": {
+              "description": "An object containing properties of the upvoted question",
+              "type": "object"
+            }
+          },
+          "example": {
+            "status": "success",
+            "data": {
+              "upVote": {
+                "total": 0,
+                "by": []
+              },
+              "downVote": {
+                "total": 2,
+                "by": [
+                  {
+                    "_id": "5d9f18582b977f0db8bbdbe3",
+                    "email": "dautii@yahoo.com",
+                    "firstName": "Ayo",
+                    "lastName": "K"
+                  },
+                  {
+                    "_id": "5d9f18582b977f0db8bbdbe3",
+                    "email": "daylay92@yahoo.com",
+                    "firstName": "Ayodele",
+                    "lastName": "King"
+                  }
+                ]
+              },
+              "_id": "5d9f175232b0c80a101d1814",
+              "text": "What is the yoruba way of writing a regular expression ?",
+              "author": {
+                "_id": "5d9f175232b0c80a101d1813",
+                "firstName": "Ayodq",
+                "lastName": "Akinb",
+                "email": "daylayzi@yahoo.com"
+              },
+              "createdAt": "2019-10-10T11:34:42.363Z",
+              "updatedAt": "2019-10-10T11:51:12.381Z"
             }
           }
         },
