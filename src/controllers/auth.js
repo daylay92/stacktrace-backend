@@ -1,7 +1,7 @@
 import { User } from '../services';
 import Helpers from '../utils';
 
-const { errorResponse, successResponse, createUserResponse, comparePassword } = Helpers;
+const { errorResponse, successResponse, addTokenToRes, comparePassword } = Helpers;
 
 /**
  * A collection of methods that controls and issues the final response during authetication.
@@ -22,7 +22,7 @@ class AuthController {
     try {
       const user = new User(req.body);
       await user.save();
-      const userData = createUserResponse(user);
+      const userData = addTokenToRes(user);
       res.cookie('token', userData.token, { maxAge: 7200000, httpOnly: true });
       return successResponse(res, userData, 201);
     } catch (e) {
@@ -49,7 +49,7 @@ class AuthController {
           message: 'Invalid email/password'
         });
       }
-      const userData = createUserResponse(user);
+      const userData = addTokenToRes(user);
       res.cookie('token', userData.token, { maxAge: 7200000, httpOnly: true });
       successResponse(res, userData, 200);
     } catch (e) {

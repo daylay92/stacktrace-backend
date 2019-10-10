@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 
 const { hashPassword } = Helpers;
 
-const options = { timestamp: true };
+const options = { timestamps: true };
 
 const userSchema = new Schema(
   {

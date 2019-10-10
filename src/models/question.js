@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
-const options = { timestamp: true };
+const options = { timestamps: true };
 
 const questionSchema = new Schema(
   {

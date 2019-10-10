@@ -136,50 +136,29 @@ class Helpers {
   }
 
   /**
-   * Makes of a model instance, removes the __v property and  changes
-   *  the _id property to id, returning a new javascript object literal.
+   * Transforms a newly created Instance and removes the __v property.
    * @static
    * @param {object} data - New Instance.
    * @memberof Helpers
    * @returns {object } - A new javascript object.
    */
-  static simpleExtract(data) {
+  static modifyRes(data) {
     const res = { ...data._doc };
-    delete res._id;
     delete res.__v;
-    return { id: data._id, ...res };
+    return { ...res };
   }
 
   /**
-   * Transforms the author object.
-   * @static
-   * @param {object} data - New Instance.
-   * @memberof Helpers
-   * @returns {object } - A new javascript object.
-   */
-  static questionResponse(data) {
-    const res = Helpers.simpleExtract(data);
-    const { firstName, lastName, email } = { ...res.author._doc };
-    return { ...res, author: { id: res.author._id, firstName, lastName, email } };
-  }
-
-  /**
-   * Extracts some user properties to be sent as a response and adds jwt token.
+   * Adds jwt token to object.
    * @static
    * @param {object} user - New User Instance.
    * @memberof Helpers
    * @returns {object } - A new object containing essential user properties and jwt token.
    */
-  static createUserResponse(user) {
-    const { _id: id, firstName, lastName, email } = { ...user._doc };
-    const token = Helpers.generateToken({ email, id });
-    return {
-      id,
-      firstName,
-      lastName,
-      email,
-      token
-    };
+  static addTokenToRes(user) {
+    const { _id, email, firstName, lastName } = Helpers.modifyRes(user);
+    const token = Helpers.generateToken({ email, id: _id });
+    return { _id, email, firstName, lastName, token };
   }
 
   /**

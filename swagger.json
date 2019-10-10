@@ -146,9 +146,9 @@
         ],
         "responses": {
           "200": {
-            "description": "Successfully a new question",
+            "description": "Successfully created a new question",
             "schema": {
-              "$ref": "#/components/schemas/responseBody/200"
+              "$ref": "#/components/schemas/responseBody/createQuestionSuccess"
             }
           },
           "400": {
@@ -161,6 +161,84 @@
             "description": "Unautheticated Request / Invalid login credentials",
             "schema": {
               "$ref": "#/components/schemas/responseBody/401"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/500"
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Enables users to view a question",
+        "summary": "Enables a user to view questions on the App with the option paginating and setting a limit to the number of questions retrieved",
+        "tags": ["Question"],
+        "produces": ["application/json"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "description": "The maximum number of questions to be retrieved"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "description": "It is the unit used to determine an offset value, as an example; a limit of 2 and a page value of 2 would offset the collection of questions by 2 and return 2 records"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved questions",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/retrievedQuestionsSuccess"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/500"
+            }
+          }
+        }
+      }
+    },
+    "/question/{id}": {
+      "get": {
+        "description": "Enables users to view a question",
+        "summary": "Enables a user to view a question by its Id",
+        "tags": ["Question"],
+        "produces": ["application/json"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The question Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved questions",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/retrievedQuestionSuccess"
+            }
+          },
+          "400": {
+            "description": "Invalid question Id",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/400"
+            }
+          },
+          "404": {
+            "description": "A question with the id doesn't exist",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/404"
             }
           },
           "500": {
@@ -240,10 +318,105 @@
         }
       },
       "responseBody": {
+        "createQuestionSuccess": {
+          "properties": {
+            "status": {
+              "description": "successful",
+              "type": "string"
+            },
+            "data": {
+              "description": "An object containing properties of the newly created question",
+              "type": "object"
+            }
+          },
+          "example": {
+            "status": "success",
+            "data": {
+              "_id": "5d9e8b8786868b19d4c8e579",
+              "text": "How can i console.log in mandarin?",
+              "author": {
+                "_id": "5d9e8b5586868b19d4c8e578",
+                "email": "daylay92@yahoo.com",
+                "firstName": "Ayodele",
+                "lastName": "King"
+              },
+              "createdAt": "2019-10-10T01:38:15.789Z",
+              "updatedAt": "2019-10-10T01:38:15.789Z"
+            }
+          }
+        },
+        "retrievedQuestionsSuccess": {
+          "properties": {
+            "status": {
+              "description": "successful",
+              "type": "string"
+            },
+            "data": {
+              "description": "An object containing properties of the newly created question",
+              "type": "object"
+            }
+          },
+          "example": {
+            "status": "success",
+            "data": [
+              {
+                "_id": "5d9e87b799ed7e1930cc5469",
+                "text": "What is the yoruba way of writing a regular expression ?",
+                "author": {
+                  "_id": "5d9e87b799ed7e1930cc5468",
+                  "firstName": "Ayodq",
+                  "lastName": "Akinb",
+                  "email": "daylayzi@yahoo.com"
+                },
+                "createdAt": "2019-10-10T01:21:59.519Z",
+                "updatedAt": "2019-10-10T01:21:59.519Z"
+              },
+              {
+                "_id": "5d9e87b799ed7e1930cc546a",
+                "text": "What is it like to be a software Engineer?",
+                "author": {
+                  "_id": "5d9e87b799ed7e1930cc5468",
+                  "firstName": "Ayodq",
+                  "lastName": "Akinb",
+                  "email": "daylayzi@yahoo.com"
+                },
+                "createdAt": "2019-10-10T01:21:59.972Z",
+                "updatedAt": "2019-10-10T01:21:59.972Z"
+              }
+            ]
+          }
+        },
+        "retrievedQuestionSuccess": {
+          "properties": {
+            "status": {
+              "description": "successful",
+              "type": "string"
+            },
+            "data": {
+              "description": "An object containing properties of the newly created question",
+              "type": "object"
+            }
+          },
+          "example": {
+            "status": "success",
+            "data": {
+              "_id": "5d9e87b799ed7e1930cc546a",
+              "text": "What is it like to be a software Engineer?",
+              "author": {
+                "_id": "5d9e87b799ed7e1930cc5468",
+                "firstName": "Ayodq",
+                "lastName": "Akinb",
+                "email": "daylayzi@yahoo.com"
+              },
+              "createdAt": "2019-10-10T01:21:59.972Z",
+              "updatedAt": "2019-10-10T01:21:59.972Z"
+            }
+          }
+        },
         "200": {
           "properties": {
             "status": {
-              "description": "sucessful request",
+              "description": "successful",
               "type": "string"
             },
             "data": {
@@ -254,6 +427,7 @@
           "example": {
             "status": "success",
             "data": {
+              "_id": "74784309eh9843",
               "firstName": "King",
               "lastName": "David",
               "email": "barelegs@gmail.com",
@@ -275,6 +449,7 @@
           "example": {
             "status": "success",
             "data": {
+              "_id": "74784309eh9843",
               "firstName": "King",
               "lastName": "David",
               "email": "barelegs@gmail.com",
