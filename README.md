@@ -64,17 +64,10 @@ npm test
 
 The application can be tested locally through localhost on port 3000 or through the live [url](https://stacktrace01.herokuapp.com/) using postman or insomnia
 
-- Users can sign up
-- User can sign in
-- User can ask Question
-- User can view Questions
-- User can Upvote or Downvote questions
-- User can answer a question
-- User can search for questions, answers and other users
 
 ### API Endpoints
 
-```
+
 Method        | Endpoint      | Enable a user to: |
 ------------- | ------------- | ---------------
 POST  | api/v1/auth/signup  | Create a user account  |
@@ -86,7 +79,7 @@ PATCH  | api/v1/question/upvote/<:id>  | Upvote a question |
 PATCH  | api/v1/question/downvote/<:id> | Downvote a question |
 POST  | api/v1/question/<:id>/answer | Answer a question |
 
-```
+
 
 ## Technologies
 
