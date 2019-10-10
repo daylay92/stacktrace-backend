@@ -37,6 +37,10 @@
     {
       "name": "Question",
       "description": "Endpoints for Questions"
+    },
+    {
+      "name": "Answer",
+      "description": "Endpoints for Answers"
     }
   ],
   "paths": {
@@ -267,7 +271,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successfully retrieved questions",
+            "description": "Successfully up-voted a question",
             "schema": {
               "$ref": "#/components/schemas/responseBody/upVoteSuccess"
             }
@@ -276,6 +280,12 @@
             "description": "Invalid question Id",
             "schema": {
               "$ref": "#/components/schemas/responseBody/400"
+            }
+          },
+          "401": {
+            "description": "Unautheticated Request / Invalid login credentials",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/401"
             }
           },
           "404": {
@@ -319,6 +329,61 @@
             "description": "Invalid question Id",
             "schema": {
               "$ref": "#/components/schemas/responseBody/400"
+            }
+          },
+          "401": {
+            "description": "Unautheticated Request / Invalid login credentials",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/401"
+            }
+          },
+          "404": {
+            "description": "A question with the id doesn't exist",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/404"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/500"
+            }
+          }
+        }
+      }
+    },
+    "/question/{id}/answer": {
+      "post": {
+        "description": "Enables users to answer a question",
+        "summary": "Enables a user to answer a question",
+        "tags": ["Answer"],
+        "produces": ["application/json"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The question Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully created an answer to a question",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/answerSuccess"
+            }
+          },
+          "400": {
+            "description": "Invalid question Id",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/400"
+            }
+          },
+          "401": {
+            "description": "Unautheticated Request / Invalid login credentials",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/401"
             }
           },
           "404": {
@@ -418,16 +483,25 @@
           "example": {
             "status": "success",
             "data": {
-              "_id": "5d9e8b8786868b19d4c8e579",
-              "text": "How can i console.log in mandarin?",
+              "upVote": {
+                "total": 0,
+                "by": []
+              },
+              "downVote": {
+                "total": 0,
+                "by": []
+              },
+              "answers": [],
+              "_id": "5d9f41b1b6735b1f94f93631",
+              "text": "How is it going in french?",
               "author": {
-                "_id": "5d9e8b5586868b19d4c8e578",
+                "_id": "5d9f4173b6735b1f94f93630",
                 "email": "daylay92@yahoo.com",
                 "firstName": "Ayodele",
                 "lastName": "King"
               },
-              "createdAt": "2019-10-10T01:38:15.789Z",
-              "updatedAt": "2019-10-10T01:38:15.789Z"
+              "createdAt": "2019-10-10T14:35:29.438Z",
+              "updatedAt": "2019-10-10T14:35:29.438Z"
             }
           }
         },
@@ -446,28 +520,94 @@
             "status": "success",
             "data": [
               {
-                "_id": "5d9e87b799ed7e1930cc5469",
+                "upVote": {
+                  "total": 0,
+                  "by": []
+                },
+                "downVote": {
+                  "total": 0,
+                  "by": []
+                },
+                "answers": [],
+                "_id": "5d9f3ef4f6716d167c200355",
                 "text": "What is the yoruba way of writing a regular expression ?",
                 "author": {
-                  "_id": "5d9e87b799ed7e1930cc5468",
+                  "_id": "5d9f3ef4f6716d167c200354",
                   "firstName": "Ayodq",
                   "lastName": "Akinb",
                   "email": "daylayzi@yahoo.com"
                 },
-                "createdAt": "2019-10-10T01:21:59.519Z",
-                "updatedAt": "2019-10-10T01:21:59.519Z"
+                "createdAt": "2019-10-10T14:23:48.784Z",
+                "updatedAt": "2019-10-10T14:23:48.784Z"
               },
               {
-                "_id": "5d9e87b799ed7e1930cc546a",
+                "upVote": {
+                  "total": 0,
+                  "by": []
+                },
+                "downVote": {
+                  "total": 1,
+                  "by": [
+                    {
+                      "_id": "5d9f3ef4f6716d167c200354",
+                      "firstName": "Ayodq",
+                      "lastName": "Akinb",
+                      "email": "daylayzi@yahoo.com"
+                    }
+                  ]
+                },
+                "answers": [],
+                "_id": "5d9f3ef5f6716d167c200356",
                 "text": "What is it like to be a software Engineer?",
                 "author": {
-                  "_id": "5d9e87b799ed7e1930cc5468",
+                  "_id": "5d9f3ef4f6716d167c200354",
                   "firstName": "Ayodq",
                   "lastName": "Akinb",
                   "email": "daylayzi@yahoo.com"
                 },
-                "createdAt": "2019-10-10T01:21:59.972Z",
-                "updatedAt": "2019-10-10T01:21:59.972Z"
+                "createdAt": "2019-10-10T14:23:49.255Z",
+                "updatedAt": "2019-10-10T14:23:58.445Z"
+              },
+              {
+                "upVote": {
+                  "total": 1,
+                  "by": [
+                    {
+                      "_id": "5d9f4173b6735b1f94f93630",
+                      "email": "daylay92@yahoo.com",
+                      "firstName": "Ayodele",
+                      "lastName": "King"
+                    }
+                  ]
+                },
+                "downVote": {
+                  "total": 0,
+                  "by": []
+                },
+                "answers": [
+                  {
+                    "_id": "5d9f43d2ead99a2704f9287c",
+                    "text": "You only live once my brother",
+                    "author": {
+                      "_id": "5d9f4173b6735b1f94f93630",
+                      "email": "daylay92@yahoo.com",
+                      "firstName": "Ayodele",
+                      "lastName": "King"
+                    },
+                    "createdAt": "2019-10-10T14:44:34.908Z",
+                    "updatedAt": "2019-10-10T14:44:34.908Z"
+                  }
+                ],
+                "_id": "5d9f41b1b6735b1f94f93631",
+                "text": "How is it going in french?",
+                "author": {
+                  "_id": "5d9f4173b6735b1f94f93630",
+                  "email": "daylay92@yahoo.com",
+                  "firstName": "Ayodele",
+                  "lastName": "King"
+                },
+                "createdAt": "2019-10-10T14:35:29.438Z",
+                "updatedAt": "2019-10-10T14:44:35.158Z"
               }
             ]
           }
@@ -486,16 +626,45 @@
           "example": {
             "status": "success",
             "data": {
-              "_id": "5d9e87b799ed7e1930cc546a",
-              "text": "What is it like to be a software Engineer?",
-              "author": {
-                "_id": "5d9e87b799ed7e1930cc5468",
-                "firstName": "Ayodq",
-                "lastName": "Akinb",
-                "email": "daylayzi@yahoo.com"
+              "upVote": {
+                "total": 1,
+                "by": [
+                  {
+                    "_id": "5d9f4173b6735b1f94f93630",
+                    "email": "daylay92@yahoo.com",
+                    "firstName": "Ayodele",
+                    "lastName": "King"
+                  }
+                ]
               },
-              "createdAt": "2019-10-10T01:21:59.972Z",
-              "updatedAt": "2019-10-10T01:21:59.972Z"
+              "downVote": {
+                "total": 0,
+                "by": []
+              },
+              "answers": [
+                {
+                  "_id": "5d9f43d2ead99a2704f9287c",
+                  "text": "You only live once my brother",
+                  "author": {
+                    "_id": "5d9f4173b6735b1f94f93630",
+                    "email": "daylay92@yahoo.com",
+                    "firstName": "Ayodele",
+                    "lastName": "King"
+                  },
+                  "createdAt": "2019-10-10T14:44:34.908Z",
+                  "updatedAt": "2019-10-10T14:44:34.908Z"
+                }
+              ],
+              "_id": "5d9f41b1b6735b1f94f93631",
+              "text": "How is it going in french?",
+              "author": {
+                "_id": "5d9f4173b6735b1f94f93630",
+                "email": "daylay92@yahoo.com",
+                "firstName": "Ayodele",
+                "lastName": "King"
+              },
+              "createdAt": "2019-10-10T14:35:29.438Z",
+              "updatedAt": "2019-10-10T14:59:08.954Z"
             }
           }
         },
@@ -608,6 +777,51 @@
               "lastName": "David",
               "email": "barelegs@gmail.com",
               "token": "8949y4dhiudfhh0doj0340"
+            }
+          }
+        },
+        "answerSuccess": {
+          "properties": {
+            "status": {
+              "description": "sucessfully created record",
+              "type": "string"
+            },
+            "data": {
+              "description": "An object containing properties of the newly created record",
+              "type": "object"
+            }
+          },
+          "example": {
+            "status": "success",
+            "data": {
+              "_id": "5d9f43d2ead99a2704f9287c",
+              "text": "\"You only live once my brother\"",
+              "author": {
+                "_id": "5d9f4173b6735b1f94f93630",
+                "email": "daylay92@yahoo.com",
+                "firstName": "Ayodele",
+                "lastName": "King"
+              },
+              "question": {
+                "upVote": {
+                  "total": 1
+                },
+                "downVote": {
+                  "total": 0
+                },
+                "_id": "5d9f41b1b6735b1f94f93631",
+                "text": "How is it going in french?",
+                "author": {
+                  "_id": "5d9f4173b6735b1f94f93630",
+                  "email": "daylay92@yahoo.com",
+                  "firstName": "Ayodele",
+                  "lastName": "King"
+                },
+                "createdAt": "2019-10-10T14:35:29.438Z",
+                "updatedAt": "2019-10-10T14:44:35.158Z"
+              },
+              "createdAt": "2019-10-10T14:44:34.908Z",
+              "updatedAt": "2019-10-10T14:44:34.908Z"
             }
           }
         },

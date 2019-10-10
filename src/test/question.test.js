@@ -3,18 +3,21 @@ import chaiHttp from 'chai-http';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import app from '..';
-import { AuthController, QuestionController } from '../controllers';
+import { AuthController, QuestionController, AnswerController } from '../controllers';
 import {
   userAskingAQuestion,
   newQuestion,
   invalidQuestion,
   sinonMockResponse,
   errorResponse,
-  mockRes
+  mockRes,
+  newAnswer,
+  inValidAnswer
 } from './dummy';
 
 const { signup } = AuthController;
-const { create, getQuestions, upVoteQuestion, downVoteQuestion } = QuestionController;
+const { createAnswer } = AnswerController;
+const { create, getQuestions, upDateQuestion } = QuestionController;
 
 chai.use(chaiHttp);
 chai.use(sinonChai);
@@ -242,13 +245,6 @@ describe('Question route endpoints', () => {
       expect(status).to.eql('fail');
       expect(error.message).to.eql('Invalid question Id');
     });
-    it('should return a 500 error response if something goes wrong while upvoting questions', async () => {
-      const req = {};
-      const res = sinonMockResponse(sinon);
-      await upVoteQuestion(req, res);
-      expect(res.status).to.have.been.calledWith(500);
-      expect(res.json).to.have.been.calledWith(errorResponse);
-    });
   });
   describe('PATCH /api/v1/question/downvote/:id', () => {
     it('should allow an authenticated user to downvote a question', async () => {
@@ -318,10 +314,85 @@ describe('Question route endpoints', () => {
       expect(status).to.eql('fail');
       expect(error.message).to.eql('Invalid question Id');
     });
-    it('should return a 500 error response if something goes wrong while downvoting questions', async () => {
+    it('should return a 500 error response if something goes wrong while downvoting/upvoting questions', async () => {
       const req = {};
       const res = sinonMockResponse(sinon);
-      await downVoteQuestion(req, res);
+      await upDateQuestion(req, res);
+      expect(res.status).to.have.been.calledWith(500);
+      expect(res.json).to.have.been.calledWith(errorResponse);
+    });
+  });
+  describe('POST /api/v1/question/:id/answer', () => {
+    it('should allow an authenticated user to successfully answer a question', async () => {
+      const response = await chai
+        .request(app)
+        .post(`${baseUrl}/${questionId}/answer`)
+        .send(newAnswer)
+        .set('token', token);
+      const { data, status } = response.body;
+      expect(response).to.have.status(201);
+      expect(status).to.eql('success');
+      expect(data.text).to.eql(newAnswer.text);
+      expect(response.body.data.author).to.include(userAskingAQuestion);
+    });
+    it('should prevent an unautheticated user from creating an answer', async () => {
+      const response = await chai
+        .request(app)
+        .post(`${baseUrl}/${questionId}/answer`)
+        .send(newAnswer);
+      const { error, status } = response.body;
+      expect(response).to.have.status(401);
+      expect(status).to.eql('fail');
+      expect(error.message).to.eql('Access denied, Token required');
+    });
+    it('should prevent a user from creating an answer with an invalid token', async () => {
+      const response = await chai
+        .request(app)
+        .post(`${baseUrl}/${questionId}/answer`)
+        .send(newAnswer)
+        .set('token', 'gyudfgufgiyegi3747');
+      const { error, status } = response.body;
+      expect(response).to.have.status(401);
+      expect(status).to.eql('fail');
+      expect(error.message).to.eql('Invalid Token');
+    });
+    it('should prevent a user from asking an invalid question (less than 6 characters long)', async () => {
+      const response = await chai
+        .request(app)
+        .post(`${baseUrl}/${questionId}/answer`)
+        .send(inValidAnswer)
+        .set('token', token);
+      const { error, status } = response.body;
+      expect(response).to.have.status(400);
+      expect(status).to.eql('fail');
+      expect(error.message).to.eql('A question should be atleast 6 characters long');
+    });
+    it("should return a 404 error if a question with the id provided doesn't exist", async () => {
+      const response = await chai
+        .request(app)
+        .post(`${baseUrl}/5d9e147c06a21a2180dfb976/answer`)
+        .set('token', token);
+      const { error, status } = response.body;
+      expect(response).to.have.status(404);
+      expect(status).to.eql('fail');
+      expect(error.message).to.eql('A question with the id provided was not found');
+    });
+    it('should return an error message if a user provides an invalid question id to the path', async () => {
+      const response = await chai
+        .request(app)
+        .post(`${baseUrl}/5/answer`)
+        .set('token', token);
+      const { error, status } = response.body;
+      expect(response).to.have.status(400);
+      expect(status).to.eql('fail');
+      expect(error.message).to.eql('Invalid question Id');
+    });
+    it('should return a 500 error response if something goes wrong while creating an answer', async () => {
+      const req = {
+        body: {}
+      };
+      const res = sinonMockResponse(sinon);
+      await createAnswer(req, res);
       expect(res.status).to.have.been.calledWith(500);
       expect(res.json).to.have.been.calledWith(errorResponse);
     });
