@@ -29,7 +29,7 @@ export const errorResponse = {
   }
 };
 export const userAskingAQuestion = {
-  firstName: 'Ayodq',
+  firstName: 'Ayodele',
   lastName: 'Akinb',
   email: 'daylayzi@yahoo.com',
   password: 'daylayayo1'

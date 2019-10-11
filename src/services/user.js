@@ -26,6 +26,23 @@ class UserService extends User {
   static async fetchByEmail(email) {
     return UserService.find({ email }).select('-__v -password');
   }
+
+  /**
+   * Finds a collection of users whose first names matches the search field
+   * @param {string} firstName - User's firstName
+   * @returns {Promise<object>} A promise object with user detail.
+   * @memberof UserService
+   */
+  static async fetchByFirstName(firstName) {
+    return UserService.find(
+      { $text: { $search: firstName } },
+      { score: { $meta: 'textScore' } }
+    )
+      .sort({
+        score: { $meta: 'textScore' }
+      })
+      .select('-__v -password');
+  }
 }
 
 export default UserService;

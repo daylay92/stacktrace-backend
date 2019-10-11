@@ -397,4 +397,27 @@ describe('Question route endpoints', () => {
       expect(res.json).to.have.been.calledWith(errorResponse);
     });
   });
+  describe('SEARCH Questions by query params', () => {
+    it("should be able to search for a question by the author's firstname", async () => {
+      const response = await chai.request(app).get(`${baseUrl}?authorName=ayodele`);
+      const { data, status } = response.body;
+      expect(response).to.have.status(200);
+      expect(status).to.eql('success');
+      expect(data.length).to.eql(2);
+    });
+    it("should be able to search for questions by predicting author's fullname", async () => {
+      const response = await chai.request(app).get(`${baseUrl}?authorName=ayo Aki`);
+      const { data, status } = response.body;
+      expect(response).to.have.status(200);
+      expect(status).to.eql('success');
+      expect(data.length).to.eql(2);
+    });
+    it('should be able to search for by  keywords, phrases or full text', async () => {
+      const response = await chai.request(app).get(`${baseUrl}?text=be a software Engineer`);
+      const { data, status } = response.body;
+      expect(response).to.have.status(200);
+      expect(status).to.eql('success');
+      expect(data.length).to.eql(1);
+    });
+  });
 });

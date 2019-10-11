@@ -41,6 +41,10 @@
     {
       "name": "Answer",
       "description": "Endpoints for Answers"
+    },
+    {
+      "name": "Search",
+      "description": "Endpoints for retrieving questions, answers or users"
     }
   ],
   "paths": {
@@ -176,12 +180,24 @@
         }
       },
       "get": {
-        "description": "Enables users to view a question",
-        "summary": "Enables a user to view questions on the App with the option paginating and setting a limit to the number of questions retrieved",
-        "tags": ["Question"],
+        "description": "Enables users to view and search for questions by the author's name which could be either fullname or firstname, by keywords or by phrases.",
+        "summary": "Enables a user to view questions and to search for questions on the App with the option paginating and setting a limit to the number of questions retrieved",
+        "tags": ["Search"],
         "produces": ["application/json"],
         "security": [],
         "parameters": [
+          {
+            "in": "query",
+            "name": "authorName",
+            "required": false,
+            "description": "The author's firstname or full name"
+          },
+          {
+            "in": "query",
+            "name": "text",
+            "required": false,
+            "description": "A phrase, keyword or text that is close to the question being searched"
+          },
           {
             "in": "query",
             "name": "limit",

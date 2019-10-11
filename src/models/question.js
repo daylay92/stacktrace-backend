@@ -50,6 +50,7 @@ const questionSchema = new Schema(
   },
   options
 );
+questionSchema.index({ text: 'text' });
 const Question = mongoose.model('Question', questionSchema);
 
 export default Question;
