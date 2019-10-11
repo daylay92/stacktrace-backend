@@ -149,6 +149,37 @@ class Helpers {
   }
 
   /**
+   * Builds query filter.
+   * @static
+   * @param {object} queryObj - Express Query Object.
+   * @memberof Helpers
+   * @returns {object } - A new javascript object.
+   */
+  static getQuery(queryObj) {
+    const res = { ...queryObj };
+    delete res.page;
+    delete res.limit;
+    return res;
+  }
+
+  /**
+   * Builds filter object for searching for questions.
+   * @static
+   * @param {object} queryObj - Express Query Object.
+   * @memberof Helpers
+   * @returns {object } - A javascript object.
+   */
+  static filterObjBuilder(queryObj) {
+    const res = Helpers.getQuery(queryObj);
+    const keyArr = Object.keys(res);
+    if (keyArr.includes('text')) {
+      const filter = { $text: { $search: res.text } };
+      return filter;
+    }
+    return res;
+  }
+
+  /**
    * Adds jwt token to object.
    * @static
    * @param {object} user - New User Instance.

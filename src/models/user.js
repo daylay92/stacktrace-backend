@@ -33,7 +33,7 @@ const userSchema = new Schema(
   },
   options
 );
-
+userSchema.index({ firstName: 'text' });
 const User = mongoose.model('User', userSchema);
 
 export default User;

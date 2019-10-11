@@ -13,7 +13,8 @@ const questionSchema = new Schema(
     text: {
       type: String,
       required: true,
-      minlength: 6
+      minlength: 6,
+      index: true
     },
     upVote: {
       total: {
@@ -50,6 +51,7 @@ const questionSchema = new Schema(
   },
   options
 );
+
 const Question = mongoose.model('Question', questionSchema);
 
 export default Question;

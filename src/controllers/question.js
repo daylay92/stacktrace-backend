@@ -1,7 +1,7 @@
 import { Question } from '../services';
 import Helpers from '../utils';
 
-const { errorResponse, successResponse, modifyRes } = Helpers;
+const { errorResponse, successResponse, modifyRes, filterObjBuilder } = Helpers;
 const { fetch } = Question;
 
 /**
@@ -47,7 +47,8 @@ class QuestionController {
   static async getQuestions(req, res) {
     try {
       const { page, limit } = req.query;
-      const questions = await fetch({ page, limit });
+      const filter = filterObjBuilder(req.query);
+      const questions = await fetch({ page, limit, filter });
       successResponse(res, questions, 200);
     } catch (e) {
       errorResponse(res, {});
