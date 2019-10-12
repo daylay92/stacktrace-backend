@@ -25,6 +25,7 @@ describe('Question route endpoints', () => {
   const baseUrl = '/api/v1/question';
   let token;
   let questionId;
+  let answerId;
   before(async () => {
     const req = { body: { ...userAskingAQuestion } };
 
@@ -147,10 +148,7 @@ describe('Question route endpoints', () => {
   });
   describe('GET /api/v1/question/:id', () => {
     it('should allow a user to successfully view a single question by its id', async () => {
-      const response = await chai
-        .request(app)
-        .get(`${baseUrl}/${questionId}`)
-        .set('token', token);
+      const response = await chai.request(app).get(`${baseUrl}/${questionId}`);
       const { data, status } = response.body;
       expect(response).to.have.status(200);
       expect(status).to.eql('success');
@@ -158,20 +156,14 @@ describe('Question route endpoints', () => {
       expect(response.body.data.author).to.include(userAskingAQuestion);
     });
     it("should return a 404 error if a question with the id provided doesn't exist", async () => {
-      const response = await chai
-        .request(app)
-        .get(`${baseUrl}/5d9e147c06a21a2180dfb976`)
-        .set('token', token);
+      const response = await chai.request(app).get(`${baseUrl}/5d9e147c06a21a2180dfb976`);
       const { error, status } = response.body;
       expect(response).to.have.status(404);
       expect(status).to.eql('fail');
       expect(error.message).to.eql('A question with the id provided was not found');
     });
     it('should return an error message if a user provides an invalid question id to the path', async () => {
-      const response = await chai
-        .request(app)
-        .get(`${baseUrl}/5`)
-        .set('token', token);
+      const response = await chai.request(app).get(`${baseUrl}/5`);
       const { error, status } = response.body;
       expect(response).to.have.status(400);
       expect(status).to.eql('fail');
@@ -190,7 +182,7 @@ describe('Question route endpoints', () => {
       expect(data.upVote.by[0]).to.include(userAskingAQuestion);
       expect(data.upVote.total).to.eql(1);
     });
-    it("should remove the 1 upvote from the total of a question's upvotes whenever a user attempts to upvotes a second for a second time", async () => {
+    it("should remove 1 upvote from the total of a question's upvotes whenever a user attempts to upvotes a second for a second time", async () => {
       const response = await chai
         .request(app)
         .patch(`${baseUrl}/upvote/${questionId}`)
@@ -201,7 +193,7 @@ describe('Question route endpoints', () => {
       expect(data.upVote.by.length).to.eql(0);
       expect(data.upVote.total).to.eql(0);
     });
-    it('should remove the 1 downvote from the total of a question and add 1 upvote to it whenever a user who previously downvoted a question make a request to upvote it', async () => {
+    it('should remove 1 downvote from the total of a question and add 1 upvote to it whenever a user who previously downvoted a question make a request to upvote it', async () => {
       const res = await chai
         .request(app)
         .patch(`${baseUrl}/downvote/${questionId}`)
@@ -270,7 +262,7 @@ describe('Question route endpoints', () => {
       expect(data.downVote.by.length).to.eql(0);
       expect(data.downVote.total).to.eql(0);
     });
-    it('should remove the 1 upvote from the total of a question and add 1 downvote to it whenever a user who previously upvoted a question make a request to downvote it', async () => {
+    it('should remove 1 upvote from the total of a question and add 1 downvote to it whenever a user who previously upvoted a question make a request to downvote it', async () => {
       const res = await chai
         .request(app)
         .patch(`${baseUrl}/upvote/${questionId}`)
@@ -330,6 +322,7 @@ describe('Question route endpoints', () => {
         .send(newAnswer)
         .set('token', token);
       const { data, status } = response.body;
+      answerId = data._id;
       expect(response).to.have.status(201);
       expect(status).to.eql('success');
       expect(data.text).to.eql(newAnswer.text);
@@ -397,6 +390,30 @@ describe('Question route endpoints', () => {
       expect(res.json).to.have.been.calledWith(errorResponse);
     });
   });
+  describe('GET api/v1/answer/:id', () => {
+    const answerBaseUrl = '/api/v1/answer';
+    it('should allow users to fetch a single answer by its id', async () => {
+      const response = await chai.request(app).get(`${answerBaseUrl}/${answerId}`);
+      const { data, status } = response.body;
+      expect(response).to.have.status(200);
+      expect(status).to.eql('success');
+      expect(data.text).to.eql(newAnswer.text);
+    });
+    it("should return a 404 error if an answer with the specified id doesn't exist", async () => {
+      const response = await chai.request(app).get(`${answerBaseUrl}/5d9e147c06a21a2180dfb976`);
+      const { error, status } = response.body;
+      expect(response).to.have.status(404);
+      expect(status).to.eql('fail');
+      expect(error.message).to.eql('An answer with the id provided was not found');
+    });
+    it('should return an error message if the route path contains an invalid answer id variable', async () => {
+      const response = await chai.request(app).get(`${answerBaseUrl}/5`);
+      const { error, status } = response.body;
+      expect(response).to.have.status(400);
+      expect(status).to.eql('fail');
+      expect(error.message).to.eql('Invalid answer Id');
+    });
+  });
   describe('SEARCH Questions by query params', () => {
     it("should be able to search for a question by the author's firstname", async () => {
       const response = await chai.request(app).get(`${baseUrl}?authorName=ayodele`);
@@ -413,7 +430,9 @@ describe('Question route endpoints', () => {
       expect(data.length).to.eql(2);
     });
     it('should be able to search for by  keywords, phrases or full text', async () => {
-      const response = await chai.request(app).get(`${baseUrl}?text=be a software Engineer`);
+      const response = await chai
+        .request(app)
+        .get(`${baseUrl}?text=be a software Engineer`);
       const { data, status } = response.body;
       expect(response).to.have.status(200);
       expect(status).to.eql('success');

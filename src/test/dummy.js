@@ -58,3 +58,9 @@ export const mockRes = {
     return result;
   }
 };
+export const someNewDude = {
+  firstName: 'Muhammed',
+  lastName: 'Buhari',
+  email: 'presido@naija.com',
+  password: 'verytoughtocrack'
+};

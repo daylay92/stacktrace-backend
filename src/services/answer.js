@@ -38,6 +38,29 @@ class AnswerService extends Answer {
         select: '-__v -password -createdAt -updatedAt'
       });
   }
+
+  /**
+   * Finds a answer by its id.
+   * @param {string} id - The answer's id.
+   * @returns {Promise<object>} A promise object with search results.
+   * @memberof QuestionService
+   */
+  static async fetchById(id) {
+    return Answer.findById(id)
+      .select('-__v')
+      .populate({
+        path: 'question',
+        select: '-__v -upVote.by -downVote.by -answers',
+        populate: {
+          path: 'author',
+          select: 'firstName lastName email'
+        }
+      })
+      .populate({
+        path: 'author',
+        select: '-__v -password -createdAt -updatedAt'
+      });
+  }
 }
 
 export default AnswerService;
