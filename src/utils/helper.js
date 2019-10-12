@@ -1,8 +1,11 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import sendgrid from '@sendgrid/mail';
 import 'dotenv/config';
 
-const { SECRET } = process.env;
+const { SECRET, SENDGRID_KEY, EMAIL_TEMPLATE_ID } = process.env;
+
+sendgrid.setApiKey(SENDGRID_KEY);
 
 /**
  *Contains Helper methods
@@ -256,6 +259,35 @@ class Helpers {
       return label;
     }
     return null;
+  }
+
+  /**
+   * Sends a notification email to a user when his/her question is answered.
+   * @param {string} email - Recipient's email address.
+   * @param {string} answerAuthor - First name of the person who provides the answer.
+   * @param {string} question - The question that got answered.
+   * @param {string} questionAuthor - Recipient's firstName.
+   * @returns {Promise<boolean>} - Resolves as true if mail was successfully sent
+   * or false if otherwise.
+   * @memberof Helpers
+   */
+  static async notify(email, answerAuthor, question, questionAuthor) {
+    const mail = {
+      to: email,
+      from: 'notify@stacktrace.com',
+      templateId: EMAIL_TEMPLATE_ID,
+      dynamic_template_data: {
+        firstName: questionAuthor,
+        text: question,
+        answerAuthor
+      }
+    };
+    try {
+      await sendgrid.send(mail);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }
 

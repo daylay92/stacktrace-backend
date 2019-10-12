@@ -3,12 +3,14 @@ import chaiHttp from 'chai-http';
 import sinonChai from 'sinon-chai';
 import sinon from 'sinon';
 import app from '..';
+import Helpers from '../utils';
 import { User, Question, Answer } from '../models';
-import { AuthMiddleware, } from '../middlewares';
+import { AuthMiddleware } from '../middlewares';
 import { sinonMockResponse, errorResponse } from './dummy';
 
 chai.use(chaiHttp);
 chai.use(sinonChai);
+const { notify } = Helpers;
 const { checkEmailAlreadyExists, verifyIfExistingUser } = AuthMiddleware;
 
 describe('Basic Utility Functions', () => {
@@ -39,5 +41,9 @@ describe('Basic Utility Functions', () => {
     await verifyIfExistingUser(req, res, next);
     expect(res.status).to.have.been.calledWith(500);
     expect(res.json).to.have.been.calledWith(errorResponse);
+  });
+  it('should return false if something goes wrong while trying to send an email notification', async () => {
+    const isNotified = await notify();
+    expect(isNotified).to.eql(false);
   });
 });

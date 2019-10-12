@@ -100,6 +100,26 @@ class AnswerService extends Answer {
         select: '-__v -password -createdAt -updatedAt'
       });
   }
+
+  /**
+   * Populates an Answer instance on creation.
+   * @param {string} answer - An Answer Instance.
+   * @returns {Promise<object>} A promise object.
+   * @memberof QuestionService
+   */
+  static async populateOnCreate(answer) {
+    return answer
+      .populate('author', 'firstName lastName email')
+      .populate({
+        path: 'question',
+        select: '-__v -upVote.by -downVote.by -answers',
+        populate: {
+          path: 'author',
+          select: 'firstName lastName email'
+        }
+      })
+      .execPopulate();
+  }
 }
 
 export default AnswerService;
