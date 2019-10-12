@@ -20,6 +20,7 @@ chai.use(sinonChai);
 
 describe('Auth route endpoints', () => {
   const baseUrl = '/api/v1/auth';
+  let token;
   afterEach(() => {
     if (sinon.restore) sinon.restore();
   });
@@ -31,9 +32,10 @@ describe('Auth route endpoints', () => {
         .send(newUser);
       const { data, status } = response.body;
       delete newUser.password;
+      token = data.token;
       expect(response).to.have.status(201);
       expect(status).to.eql('success');
-      expect(data.token).to.be.a('string');
+      expect(token).to.be.a('string');
       expect(response.body.data).to.include(newUser);
     });
     it('should prevent a user from registering with an existing email address', async () => {
@@ -120,6 +122,25 @@ describe('Auth route endpoints', () => {
       await signin(req, res);
       expect(res.status).to.have.been.calledWith(500);
       expect(res.json).to.have.been.calledWith(errorResponse);
+    });
+  });
+  describe('GET /api/v1/auth/logout', () => {
+    it('should return an error if a user tries to log out without first logging in', async () => {
+      const response = await chai.request(app).get(`${baseUrl}/logout`);
+      const { error, status } = response.body;
+      expect(response).to.have.status(401);
+      expect(status).to.eql('fail');
+      expect(error.message).to.eql('Access denied, Token required');
+    });
+    it('should successfully signout a logged in user', async () => {
+      const response = await chai
+        .request(app)
+        .get(`${baseUrl}/logout`)
+        .set('token', token);
+      const { data, status } = response.body;
+      expect(response).to.have.status(200);
+      expect(status).to.eql('success');
+      expect(data.message).to.eql('You have been successfully logged out');
     });
   });
 });

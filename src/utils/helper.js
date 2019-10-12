@@ -163,6 +163,35 @@ class Helpers {
   }
 
   /**
+   * Builds filter object for searching for users.
+   * @static
+   * @param {object} queryObj - Express Query Object.
+   * @memberof Helpers
+   * @returns {object } - A javascript object.
+   */
+  static userFilterObj(queryObj) {
+    const res = { ...queryObj };
+    if (res.key && res.value) {
+      const { key, value } = res;
+      return { [key]: value };
+    }
+    return res;
+  }
+
+  /**
+   * Checks if the filter object contains a password field and returns an empty object if it does.
+   * @static
+   * @param {object} filter - The user filter object.
+   * @memberof Helpers
+   * @returns {object } - A javascript object.
+   */
+  static checkFilter(filter) {
+    const res = { ...filter };
+    if (res.password) return {};
+    return res;
+  }
+
+  /**
    * Builds filter object for searching for questions.
    * @static
    * @param {object} queryObj - Express Query Object.

@@ -23,7 +23,11 @@ class AuthController {
       const user = new User(req.body);
       await user.save();
       const userData = addTokenToRes(user);
-      res.cookie('token', userData.token, { maxAge: 7200000, httpOnly: true });
+      res.cookie('token', userData.token, {
+        maxAge: 7200000,
+        httpOnly: true,
+        sameSite: true
+      });
       return successResponse(res, userData, 201);
     } catch (e) {
       errorResponse(res, {});
@@ -50,11 +54,29 @@ class AuthController {
         });
       }
       const userData = addTokenToRes(user);
-      res.cookie('token', userData.token, { maxAge: 7200000, httpOnly: true });
+      res.cookie('token', userData.token, {
+        maxAge: 7200000,
+        httpOnly: true,
+        sameSite: true
+      });
       successResponse(res, userData, 200);
     } catch (e) {
       errorResponse(res, {});
     }
+  }
+
+  /**
+   *  Logs out an autheticated user.
+   * @static
+   * @param {Request} req - The request from the endpoint.
+   * @param {Response} res - The response returned by the method.
+   * @returns { JSON } - A JSON object containing success or failure details.
+   * @memberof Auth
+   */
+  static logout(req, res) {
+    res.clearCookie('token', { httpOnly: true, sameSite: true });
+    const data = { message: 'You have been successfully logged out' };
+    successResponse(res, data, 200);
   }
 }
 

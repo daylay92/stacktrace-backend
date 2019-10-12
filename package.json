@@ -4,7 +4,7 @@
   "description": "A simple REST API, that enables registered users to ask and get answers to questions, providing access to features like up-voting and down-voting among other things.",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test nyc --reporter=text --reporter=html mocha src/**/*.test.js --timeout 10000 -c -r @babel/register --exit",
+    "test": "cross-env NODE_ENV=test nyc --reporter=text --reporter=html mocha src/**/*.test.js --timeout 12000 -c -r @babel/register --exit",
     "start:dev": "nodemon --exec babel-node src",
     "start": "node dist/",
     "build": "babel src -d dist",

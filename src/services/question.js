@@ -1,6 +1,7 @@
 import { Question } from '../models';
 import User from './user';
 
+const { fetchByAuthorName } = User;
 /**
  * It is the interface for question model.
  *
@@ -61,21 +62,8 @@ class QuestionService extends Question {
    * @memberof QuestionService
    */
   static async fetchQuestionByAuthorName(authorName, skip, limit) {
-    const nameArr = authorName.split(' ');
-    let arrayOfIds;
-    let filter;
-    if (nameArr.length === 1) {
-      filter = { $text: { $search: nameArr[0] } };
-      arrayOfIds = await User.find(filter).select('_id');
-    } else {
-      filter = {
-        firstName: new RegExp(nameArr[0], 'i'),
-        lastName: new RegExp(nameArr[1], 'i')
-      };
-      arrayOfIds = await User.find(filter).select('_id');
-    }
-
-    const idArr = arrayOfIds.map(async ({ _id }) => _id);
+    const users = await fetchByAuthorName(authorName);
+    const idArr = users.map(async ({ _id }) => _id);
     const result = await Promise.all(idArr);
     return QuestionService.find({ author: { $in: [...result] } })
       .select('-__v')

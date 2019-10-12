@@ -35,6 +35,10 @@
       "description": "Endpoints for Authentication"
     },
     {
+      "name": "User",
+      "description": "Endpoints for Users"
+    },
+    {
       "name": "Question",
       "description": "Endpoints for Questions"
     },
@@ -123,6 +127,140 @@
             "description": "Unautheticated Request / Invalid login credentials",
             "schema": {
               "$ref": "#/components/schemas/responseBody/401"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/500"
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "get": {
+        "description": "Logs out a user",
+        "summary": "Enables a user to logout",
+        "tags": ["Auth"],
+        "produces": ["application/json"],
+        "security": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successfully logged out a user.",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/logoutSuccess"
+            }
+          },
+          "401": {
+            "description": "You are not logged in",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/401"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/500"
+            }
+          }
+        }
+      }
+    },
+    "/user": {
+      "get": {
+        "description": "Retrieves a collection of users based on the query parameters",
+        "summary": "Enables all users to view other user's details and to filter results based on query parameters with the option paginating and setting a limit to the number of users retrieved",
+        "tags": ["Search"],
+        "produces": ["application/json"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "name",
+            "required": false,
+            "description": "The author's firstname or full name"
+          },
+          {
+            "in": "query",
+            "name": "key",
+            "required": false,
+            "description": "Any generic property of a user, like email or id, password field is ignored"
+          },
+          {
+            "in": "query",
+            "name": "value",
+            "required": false,
+            "description": "The value of the key. e.g: if key is email then value could be wer@hot.com"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "description": "The maximum number of questions to be retrieved"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "description": "It is the unit used to determine an offset value, as an example; a limit of 2 and a page value of 2 would offset the collection of questions by 2 and return 2 records"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved users",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/200"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/500"
+            }
+          }
+        }
+      }
+    },
+    "/user/{id}": {
+      "get": {
+        "description": "Retrieves a single user",
+        "summary": "Retrieves a user by Id",
+        "tags": ["User"],
+        "produces": ["application/json"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The user's Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved user",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/200"
+            }
+          },
+          "400": {
+            "description": "Invalid user Id",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/400"
+            }
+          },
+          "401": {
+            "description": "Unautheticated Request / Invalid login credentials",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/401"
+            }
+          },
+          "404": {
+            "description": "A user with the id doesn't exist",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/404"
             }
           },
           "500": {
@@ -404,6 +542,49 @@
           },
           "404": {
             "description": "A question with the id doesn't exist",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/404"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/500"
+            }
+          }
+        }
+      }
+    },
+    "/answer/{id}": {
+      "get": {
+        "description": "Enables users to fetch an answer",
+        "summary": "Enables users to fetch an answer to a question by its Id",
+        "tags": ["Answer"],
+        "produces": ["application/json"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The answer Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved an answer to a question",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/answerSuccess"
+            }
+          },
+          "400": {
+            "description": "Invalid answer Id",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/400"
+            }
+          },
+          "404": {
+            "description": "An answer with the id doesn't exist",
             "schema": {
               "$ref": "#/components/schemas/responseBody/404"
             }
@@ -771,6 +952,24 @@
               },
               "createdAt": "2019-10-10T11:34:42.363Z",
               "updatedAt": "2019-10-10T11:51:12.381Z"
+            }
+          }
+        },
+        "logoutSuccess": {
+          "properties": {
+            "status": {
+              "description": "successful",
+              "type": "string"
+            },
+            "data": {
+              "description": "An object containing properties of the newly created record",
+              "type": "object"
+            }
+          },
+          "example": {
+            "status": "success",
+            "data": {
+              "message": "You have been successfully logged out"
             }
           }
         },
