@@ -1,4 +1,9 @@
 import { Answer } from '../models';
+import User from './user';
+import Helpers from '../utils';
+
+const { fetchByAuthorName } = User;
+const { filterForKeyValue } = Helpers;
 
 /**
  * It is the interface of answer model.
@@ -19,9 +24,43 @@ class AnswerService extends Answer {
    */
   static async fetch(options = {}) {
     const limit = +options.limit || 30;
-    const filter = options.filter || {};
     const skip = +options.page ? (+options.page - 1) * limit : 0;
+    if (options.filter.authorName) {
+      const { authorName } = options.filter;
+      return AnswerService.fetchAnswerByAuthorName(authorName, skip, limit);
+    }
+    const filter = filterForKeyValue(options.filter) || {};
     return AnswerService.find(filter)
+      .select('-__v')
+      .skip(skip)
+      .limit(limit)
+      .populate({
+        path: 'question',
+        select: '-__v -upVote.by -downVote.by -answers',
+        populate: {
+          path: 'author',
+          select: 'firstName lastName email'
+        }
+      })
+      .populate({
+        path: 'author',
+        select: '-__v -password -createdAt -updatedAt'
+      });
+  }
+
+  /**
+   * Finds a answer by its author's name.
+   * @param {string} authorName - The answer's author name.
+   * @param {number} skip - Offset value.
+   * @param {number} limit - Max number of records.
+   * @returns {Promise<object>} A promise object with search results.
+   * @memberof AnswerService
+   */
+  static async fetchAnswerByAuthorName(authorName, skip, limit) {
+    const users = await fetchByAuthorName(authorName);
+    const idArr = users.map(async ({ _id }) => _id);
+    const result = await Promise.all(idArr);
+    return AnswerService.find({ author: { $in: [...result] } })
       .select('-__v')
       .skip(skip)
       .limit(limit)

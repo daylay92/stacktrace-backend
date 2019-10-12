@@ -400,7 +400,9 @@ describe('Question route endpoints', () => {
       expect(data.text).to.eql(newAnswer.text);
     });
     it("should return a 404 error if an answer with the specified id doesn't exist", async () => {
-      const response = await chai.request(app).get(`${answerBaseUrl}/5d9e147c06a21a2180dfb976`);
+      const response = await chai
+        .request(app)
+        .get(`${answerBaseUrl}/5d9e147c06a21a2180dfb976`);
       const { error, status } = response.body;
       expect(response).to.have.status(404);
       expect(status).to.eql('fail');
@@ -433,6 +435,32 @@ describe('Question route endpoints', () => {
       const response = await chai
         .request(app)
         .get(`${baseUrl}?text=be a software Engineer`);
+      const { data, status } = response.body;
+      expect(response).to.have.status(200);
+      expect(status).to.eql('success');
+      expect(data.length).to.eql(1);
+    });
+  });
+
+  describe('GET /api/v1/answer', () => {
+    const url = '/api/v1/answer';
+    it('it should retrieve all answers with the max number of records set at 30', async () => {
+      const response = await chai.request(app).get(`${url}`);
+      const { data, status } = response.body;
+      expect(response).to.have.status(200);
+      expect(status).to.eql('success');
+      expect(data.length).to.be.at.most(30);
+      expect(data.length).to.be.at.least(1);
+    });
+    it("should enable users to search for answers by the author's name", async () => {
+      const response = await chai.request(app).get(`${url}?authorName=ayo`);
+      const { data, status } = response.body;
+      expect(response).to.have.status(200);
+      expect(status).to.eql('success');
+      expect(data.length).to.eql(1);
+    });
+    it('should allow users to search for answers by a generic property using key and value as query parameters', async () => {
+      const response = await chai.request(app).get(`${url}?key=id&value=${answerId}`);
       const { data, status } = response.body;
       expect(response).to.have.status(200);
       expect(status).to.eql('success');

@@ -8,15 +8,19 @@
 
 A simple REST API, that enables registered users to ask and get answers to questions, providing access to features like up-voting and down-voting among other things.
 
-## Required Features
+## Features
 
 - Users can sign up
 - User can sign in
+- User can sign out
 - User can ask Question
 - User can view Questions
 - User can Upvote or Downvote questions
 - User can answer a question
-- User can search for questions, answers and other users
+- User can search for questions by text
+- User can search for questions by the author's name
+- User can search for other user's by their names
+- User can search for answers by the author's name
 
 ## Getting Started
 
@@ -72,12 +76,17 @@ Method        | Endpoint      | Enable a user to: |
 ------------- | ------------- | ---------------
 POST  | api/v1/auth/signup  | Create a user account  |
 POST  | api/v1/auth/signin  | Login a user |
+GET  | api/v1/auth/logout  | Logout a user |
+GET  | api/v1/user  | Fetch a collection of users |
+GET  | api/v1/user/<:id>  | Get a specific user by its id |
 POST  | api/v1/question | Ask a question |
 GET  | api/v1/question/<:id>  | Get a specific question by its id |
 GET  | api/v1/question | Get a collection of questions |
 PATCH  | api/v1/question/upvote/<:id>  | Upvote a question |
 PATCH  | api/v1/question/downvote/<:id> | Downvote a question |
 POST  | api/v1/question/<:id>/answer | Answer a question |
+GET  | api/v1/answer/<:id> | Get a specific answer by its id |
+GET  | api/v1/answer | Fetch a collection of answers |
 
 
 

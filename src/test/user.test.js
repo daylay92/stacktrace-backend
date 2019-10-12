@@ -7,7 +7,6 @@ import { AuthController } from '../controllers';
 const { signup } = AuthController;
 chai.use(chaiHttp);
 
-
 describe('User route Endpoints', () => {
   const baseUrl = '/api/v1/user';
   let userId;
@@ -69,9 +68,7 @@ describe('User route Endpoints', () => {
       expect(data).to.include(someNewDude);
     });
     it("should return a 404 error if a user with the id specified doesn't exist", async () => {
-      const response = await chai
-        .request(app)
-        .get(`${baseUrl}/5d9e147c06a21a2180dfb976`);
+      const response = await chai.request(app).get(`${baseUrl}/5d9e147c06a21a2180dfb976`);
       const { error, status } = response.body;
       expect(response).to.have.status(404);
       expect(status).to.eql('fail');

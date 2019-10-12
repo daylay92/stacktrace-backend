@@ -36,7 +36,7 @@ class QuestionController {
   }
 
   /**
-   * Fetches atleast 30 questions.
+   * Fetches at most 30 questions.
    *
    * @static
    * @param {Request} req - The request from the endpoint.

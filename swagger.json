@@ -171,7 +171,7 @@
     "/user": {
       "get": {
         "description": "Retrieves a collection of users based on the query parameters",
-        "summary": "Enables all users to view other user's details and to filter results based on query parameters with the option paginating and setting a limit to the number of users retrieved",
+        "summary": "Enables all users to view other user's details and to filter results based on query parameters with the option of paginating and setting a limit to the number of users retrieved",
         "tags": ["Search"],
         "produces": ["application/json"],
         "security": [],
@@ -198,7 +198,7 @@
             "in": "query",
             "name": "limit",
             "required": false,
-            "description": "The maximum number of questions to be retrieved"
+            "description": "The maximum number of users to be retrieved"
           },
           {
             "in": "query",
@@ -211,7 +211,7 @@
           "200": {
             "description": "Successfully retrieved users",
             "schema": {
-              "$ref": "#/components/schemas/responseBody/200"
+              "$ref": "#/components/schemas/responseBody/successUserCollection"
             }
           },
           "500": {
@@ -544,6 +544,61 @@
             "description": "A question with the id doesn't exist",
             "schema": {
               "$ref": "#/components/schemas/responseBody/404"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/500"
+            }
+          }
+        }
+      }
+    },
+    "/answer": {
+      "get": {
+        "description": "Retrieves a collection of answers based on the query parameters",
+        "summary": "Enables users to fetch a collection of answers and to filter the results based on query parameters, with the option of paginating and setting a limit to the number of answers retrieved",
+        "tags": ["Search"],
+        "produces": ["application/json"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "authorName",
+            "required": false,
+            "description": "The author's firstname or full name"
+          },
+          {
+            "in": "query",
+            "name": "key",
+            "required": false,
+            "description": "Any generic property of an answer like author, id or question field values"
+          },
+          {
+            "in": "query",
+            "name": "value",
+            "required": false,
+            "description": "The value of the key. e.g: if key is author then value is the author's id"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "description": "The maximum number of answers to be retrieved"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "description": "It is the unit used to determine an offset value, as an example; a limit of 2 and a page value of 2 would offset the collection of answers by 2 and return 2 records"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved answers",
+            "schema": {
+              "$ref": "#/components/schemas/responseBody/answerSuccessCollection"
             }
           },
           "500": {
@@ -973,6 +1028,55 @@
             }
           }
         },
+        "successUserCollection": {
+          "properties": {
+            "status": {
+              "description": "successful",
+              "type": "string"
+            },
+            "data": {
+              "description": "A collection of object containing properties of the an answer",
+              "type": "object"
+            }
+          },
+          "example": {
+            "status": "success",
+            "data": [
+              {
+                "_id": "5da20170113c1312844a9daf",
+                "firstName": "Ayo",
+                "lastName": "Akin",
+                "email": "daylay10@yahoo.com",
+                "createdAt": "2019-10-12T16:38:08.115Z",
+                "updatedAt": "2019-10-12T16:38:08.115Z"
+              },
+              {
+                "_id": "5da20170113c1312844a9db0",
+                "firstName": "Ayo",
+                "lastName": "Akin",
+                "email": "kinga@hotmail.com",
+                "createdAt": "2019-10-12T16:38:08.709Z",
+                "updatedAt": "2019-10-12T16:38:08.709Z"
+              },
+              {
+                "_id": "5da20171113c1312844a9db1",
+                "firstName": "Ayodele",
+                "lastName": "Akinb",
+                "email": "daylayzi@yahoo.com",
+                "createdAt": "2019-10-12T16:38:09.967Z",
+                "updatedAt": "2019-10-12T16:38:09.967Z"
+              },
+              {
+                "_id": "5da2018a113c1312844a9db6",
+                "firstName": "Muhammed",
+                "lastName": "Buhari",
+                "email": "presido@naija.com",
+                "createdAt": "2019-10-12T16:38:34.829Z",
+                "updatedAt": "2019-10-12T16:38:34.829Z"
+              }
+            ]
+          }
+        },
         "200": {
           "properties": {
             "status": {
@@ -995,6 +1099,53 @@
             }
           }
         },
+        "answerSuccessCollection": {
+          "properties": {
+            "status": {
+              "description": "sucessfully retrieved record",
+              "type": "string"
+            },
+            "data": {
+              "description": "A collection of object containing properties of the newly created record",
+              "type": "array"
+            }
+          },
+          "example": {
+            "status": "success",
+            "data": [
+              {
+                "_id": "5da1d60c90753611482ea407",
+                "text": "The easiest answer is nothing",
+                "author": {
+                  "_id": "5da1d60090753611482ea404",
+                  "firstName": "Ayodele",
+                  "lastName": "Akinb",
+                  "email": "daylayzi@yahoo.com"
+                },
+                "question": {
+                  "upVote": {
+                    "total": 0
+                  },
+                  "downVote": {
+                    "total": 1
+                  },
+                  "_id": "5da1d60190753611482ea406",
+                  "text": "What is it like to be a software Engineer?",
+                  "author": {
+                    "_id": "5da1d60090753611482ea404",
+                    "firstName": "Ayodele",
+                    "lastName": "Akinb",
+                    "email": "daylayzi@yahoo.com"
+                  },
+                  "createdAt": "2019-10-12T13:32:49.667Z",
+                  "updatedAt": "2019-10-12T13:33:00.307Z"
+                },
+                "createdAt": "2019-10-12T13:33:00.089Z",
+                "updatedAt": "2019-10-12T13:33:00.089Z"
+              }
+            ]
+          }
+        },
         "answerSuccess": {
           "properties": {
             "status": {
@@ -1010,7 +1161,7 @@
             "status": "success",
             "data": {
               "_id": "5d9f43d2ead99a2704f9287c",
-              "text": "\"You only live once my brother\"",
+              "text": "You only live once my brother",
               "author": {
                 "_id": "5d9f4173b6735b1f94f93630",
                 "email": "daylay92@yahoo.com",
