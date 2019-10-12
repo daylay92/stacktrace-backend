@@ -17,10 +17,12 @@ A simple REST API, that enables registered users to ask and get answers to quest
 - User can view Questions
 - User can Upvote or Downvote questions
 - User can answer a question
+- User gets notified when his/her questions are answered
 - User can search for questions by text
 - User can search for questions by the author's name
 - User can search for other user's by their names
 - User can search for answers by the author's name
+
 
 ## Getting Started
 
@@ -50,7 +52,9 @@ Create a `.env` file and add the environment variables described in the .env.sam
 
 - `SIGN_SECRET` - JWT secret for signing access token.
 - `MONGODB_URI` - Connection string for monogodb database (test environment).
-- `MONGODB_DEV_URI` - Connection string for monogodb database (test environment).
+- `MONGODB_DEV_URI` - Connection string for monogodb database (development environment).
+- `SENDGRID_KEY` - Sendgrid API key for sending dynamic email notification (optional).
+- `EMAIL_TEMPLATE_ID` - Sendgrid email template ID (optional).
 
 ## Starting the dev server
 

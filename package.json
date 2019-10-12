@@ -48,6 +48,7 @@
   "dependencies": {
     "@babel/runtime": "^7.6.2",
     "@hapi/joi": "^16.1.7",
+    "@sendgrid/mail": "^6.4.0",
     "bcrypt": "^3.0.6",
     "cookie-parser": "^1.4.4",
     "dotenv": "^8.1.0",

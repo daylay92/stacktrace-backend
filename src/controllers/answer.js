@@ -1,8 +1,8 @@
 import { Answer } from '../services';
 import Helpers from '../utils';
 
-const { errorResponse, successResponse, modifyRes, getQuery } = Helpers;
-const { fetch } = Answer;
+const { errorResponse, successResponse, modifyRes, getQuery, notify } = Helpers;
+const { fetch, populateOnCreate } = Answer;
 
 /**
  * A collection of methods that controls the success response
@@ -27,19 +27,17 @@ class AnswerController {
       await answer.save();
       question.answers.push(answer._id);
       await question.save();
-      const resAnswer = await answer
-        .populate('author', 'firstName lastName email')
-        .populate({
-          path: 'question',
-          select: '-__v -upVote.by -downVote.by -answers',
-          populate: {
-            path: 'author',
-            select: 'firstName lastName email'
-          }
-        })
-        .execPopulate();
+      const resAnswer = await populateOnCreate(answer);
       const updatedAnswer = modifyRes(resAnswer);
-      successResponse(res, updatedAnswer, 201);
+      const {
+        question: {
+          author: { email, firstName: questionAuthor }
+        },
+        author: { firstName, lastName }
+      } = updatedAnswer;
+      const answerAuthor = `${firstName} ${lastName}`;
+      const notified = await notify(email, answerAuthor, question.text, questionAuthor);
+      successResponse(res, { ...updatedAnswer, notified }, 201);
     } catch (e) {
       errorResponse(res, {});
     }
