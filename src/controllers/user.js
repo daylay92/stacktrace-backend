@@ -12,12 +12,12 @@ const { fetch } = User;
  */
 class UserController {
   /**
-   * Fetches atleast 30 questions.
+   * Fetches at most 30 Users.
    *
    * @static
    * @param {Request} req - The request from the endpoint.
    * @param {Response} res - The response returned by the method.
-   * @returns { JSON } A JSON response containing the details of the question.
+   * @returns { JSON } A JSON response containing the details of the answers.
    * @memberof QuestionController
    */
   static async getUsers(req, res) {

@@ -1,7 +1,7 @@
 import { User } from '../models';
 import Helpers from '../utils';
 
-const { userFilterObj, checkFilter } = Helpers;
+const { filterForKeyValue, checkFilter } = Helpers;
 /**
  * It is the interface of user model.
  *
@@ -26,7 +26,7 @@ class UserService extends User {
       const { name } = options.filter;
       return UserService.fetchByAuthorName(name, skip, limit);
     }
-    const filter = userFilterObj(options.filter) || {};
+    const filter = filterForKeyValue(options.filter) || {};
     return UserService.find(checkFilter(filter))
       .select('-__v -password')
       .skip(skip)

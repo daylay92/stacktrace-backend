@@ -159,21 +159,39 @@ class Helpers {
     const res = { ...queryObj };
     delete res.page;
     delete res.limit;
-    return res;
+    return Helpers.transFormId(res);
   }
 
   /**
-   * Builds filter object for searching for users.
+   * Builds filter object for key-value pair search.
    * @static
    * @param {object} queryObj - Express Query Object.
    * @memberof Helpers
    * @returns {object } - A javascript object.
    */
-  static userFilterObj(queryObj) {
+  static filterForKeyValue(queryObj) {
     const res = { ...queryObj };
     if (res.key && res.value) {
       const { key, value } = res;
-      return { [key]: value };
+      const query = { [key]: value };
+      return Helpers.transFormId(query);
+    }
+    return res;
+  }
+
+  /**
+   * Transforms an id value in a query object to _id.
+   * @static
+   * @param {object} queryObj - Express Query Object.
+   * @memberof Helpers
+   * @returns {object } - A javascript object.
+   */
+  static transFormId(queryObj) {
+    const res = { ...queryObj };
+    if (res.id) {
+      const _id = queryObj.id;
+      delete res.id;
+      return { ...res, _id };
     }
     return res;
   }
